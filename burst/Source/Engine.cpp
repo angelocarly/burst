@@ -6,12 +6,12 @@
 burst::Engine::Engine()
 {
     spdlog::set_level(spdlog::level::debug);
-    spdlog::stdout_color_mt("vulkan");
+    spdlog::stdout_color_mt("burst");
 
-    spdlog::get( "vulkan" )->info( "Started engine" );
+    spdlog::get( "burst" )->info( "Started engine" );
 }
 
 burst::Engine::~Engine()
 {
-    spdlog::get( "vulkan" )->info( "Stopped engine" );
+    spdlog::get( "burst" )->info( "Stopped engine" );
 }
