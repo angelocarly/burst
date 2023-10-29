@@ -17,6 +17,14 @@ From this come the following design principles I will try to uphold:
 
 These goals are ambitious, but this will be a best effort.
 
+## Building
+```
+mkdir build && cd build
+cmake ..
+make
+example/Example
+```
+
 ## Roadmap
 - [ ] Dependency setup and documentation
 - [ ] Integration with a first test implementation
