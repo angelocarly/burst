@@ -5,6 +5,9 @@ namespace burst
 {
     class Engine
     {
+        public:
+            Engine();
+            ~Engine();
     };
 }
 

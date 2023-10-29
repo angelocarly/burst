@@ -22,3 +22,6 @@ These goals are ambitious, but this will be a best effort.
 - [ ] Integration with a first test implementation
 - [ ] Vulkan + Window instantiation
 - [ ] Test framework
+
+## Dependencies
+- [spdlog](https://github.com/gabime/spdlog) - A fast header only logging library

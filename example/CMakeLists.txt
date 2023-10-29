@@ -13,6 +13,12 @@ add_executable(
         ${HEADER_FILES}
 )
 
-set_property( TARGET ${LIBRARY_OUTPUT_NAME} PROPERTY CXX_STANDARD 17 )
+set_property( TARGET Example PROPERTY CXX_STANDARD 17 )
+
+## Project libraries
+target_link_libraries(
+    Example PUBLIC
+        Burst
+)
 
 include_directories( ${PROJECT_ROOT_DIR} )

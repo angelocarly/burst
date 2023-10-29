@@ -1,6 +1,8 @@
 #include <iostream>
 
+#include "burst/Engine.h"
+
 int main()
 {
-    std::cout << "Hello example\n";
+    auto engine = burst::Engine();
 }
