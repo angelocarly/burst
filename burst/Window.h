@@ -9,14 +9,25 @@ namespace burst
     class Window
     {
         public:
+            /**
+             * Contruct a system window.
+             * @param width Initial width
+             * @param height Initial height
+             */
             Window( int width, int height, const char * title);
             ~Window();
 
         public:
             GLFWwindow * GetGLFWWindow();
 
-        public:
+            /**
+             * @brief Returns true if the window should close. I.e. the user has clicked the close button.
+             */
             bool ShouldClose() const;
+
+            /**
+             * @brief Polls for input and resize events.
+             */
             void Poll() const;
 
         private:
