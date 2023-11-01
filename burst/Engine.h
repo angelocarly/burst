@@ -8,6 +8,9 @@ namespace burst
         public:
             Engine();
             ~Engine();
+
+        public:
+            void Run() const;
     };
 }
 

@@ -28,7 +28,7 @@ example/Example
 
 ## Roadmap
 - [ ] Dependency setup and documentation
-- [ ] Integration with a first test implementation
+- [x] ~~Integration with a first test implementation~~ See [Borst](https://github.com/angelocarly/borst).
 - [ ] Vulkan + Window instantiation
 - [ ] Test framework
 

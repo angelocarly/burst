@@ -1,5 +1,7 @@
 #include "burst/Engine.h"
 
+#include "burst/Window.h"
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
@@ -14,4 +16,14 @@ burst::Engine::Engine()
 burst::Engine::~Engine()
 {
     spdlog::get( "burst" )->info( "Stopped engine" );
+}
+
+void
+burst::Engine::Run() const
+{
+    burst::Window window( 800, 600, "Burst" );
+    while( !window.ShouldClose() )
+    {
+        window.Poll();
+    }
 }

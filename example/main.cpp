@@ -5,4 +5,5 @@
 int main()
 {
     auto engine = burst::Engine();
+    engine.Run();
 }

@@ -1,11 +1,13 @@
 set(
-    SOURCE_FILES
-        Source/Engine.cpp
+    HEADER_FILES
+        Engine.h
+        Window.h
 )
 
 set(
-    HEADER_FILES
-        Engine.h
+    SOURCE_FILES
+        Source/Engine.cpp
+        Source/Window.cpp
 )
 
 add_library(
@@ -22,3 +24,7 @@ include_directories( ${PROJECT_ROOT_DIR} )
 # spdlog
 find_package( spdlog REQUIRED )
 target_link_libraries( Burst PUBLIC spdlog::spdlog )
+
+# GLFW
+find_package( glfw3 3.3 REQUIRED )
+target_link_libraries( Burst PUBLIC glfw )
