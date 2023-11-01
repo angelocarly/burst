@@ -33,4 +33,5 @@ example/Example
 - [ ] Test framework
 
 ## Dependencies
+Following dependencies have to be installed on your system:
 - [spdlog](https://github.com/gabime/spdlog) - A fast header only logging library
