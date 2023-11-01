@@ -12,12 +12,18 @@ Burst is intented to:
 - Stay relatively simple and documented.
 
 ## Building
-First, install the required system dependencies:
+Firstly, install the required system dependencies:
 ```
 sudo apt-get install -y libspdlog-dev libglfw3-dev
 ```
 
-Then build burst:
+Secondly, install the Vulkan SDK and set the path environment variables:
+```
+export VULKAN_SDK=/path/to/vulkan/sdk
+export VK_ICD_FILENAMES=/path/to/vulkan/sdk/etc/vulkan/icd.d
+```
+
+Then build Burst:
 ```
 mkdir build && cd build
 cmake ..

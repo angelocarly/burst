@@ -22,3 +22,7 @@ include_directories( ${PROJECT_ROOT_DIR} )
 # spdlog
 find_package( spdlog REQUIRED )
 target_link_libraries( Vkt PUBLIC spdlog::spdlog )
+
+# Vulkan
+find_package( Vulkan REQUIRED )
+target_link_libraries( Vkt PUBLIC Vulkan::Vulkan )
