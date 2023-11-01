@@ -17,7 +17,7 @@ Firstly, install the required system dependencies:
 sudo apt-get install -y libspdlog-dev libglfw3-dev
 ```
 
-Secondly, install the Vulkan SDK and set the path environment variables:
+Secondly, install the [Vulkan SDK](https://vulkan.lunarg.com) and set the path environment variables:
 ```
 export VULKAN_SDK=/path/to/vulkan/sdk
 export VK_ICD_FILENAMES=/path/to/vulkan/sdk/etc/vulkan/icd.d
@@ -35,9 +35,10 @@ example/Example
 - [x] ~~Basic dependency setup and documentation~~
 - [x] ~~Integration with a first test implementation~~ See [Borst](https://github.com/angelocarly/borst).
 - [x] ~~Window instantiation~~
-- [ ] Vulkan instantiation
+- [x] ~~Vulkan instantiation~~
 - [ ] Test framework
 
 ## Dependencies
 - [spdlog](https://github.com/gabime/spdlog) - Fast header only logging library.
 - [glfw](https://github.com/glfw/glfw) - Cross platform window and input library.
+- [Vulkan SDK](https://vulkan.lunarg.com) - Low level graphics API.
