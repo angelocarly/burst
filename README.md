@@ -1,5 +1,5 @@
 # Burst
-![build](https://github.com/angelocarly/burst/actions/workflows/cmake/badge.svg)
+![build](https://github.com/angelocarly/burst/actions/workflows/cmake.yml/badge.svg)  
 Simple C++ rendering library using Vulkan.
 
 ## Philosophy
