@@ -25,7 +25,8 @@ export VK_ICD_FILENAMES=/path/to/vulkan/sdk/etc/vulkan/icd.d
 
 Then build Burst:
 ```
-mkdir build && cd build
+git clone https://github.com/angelocarly/burst.git
+cd burst && mkdir build && cd build
 cmake ..
 make
 example/Example
