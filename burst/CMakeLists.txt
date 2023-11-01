@@ -19,6 +19,12 @@ add_library(
 set_property( TARGET ${LIBRARY_OUTPUT_NAME} PROPERTY CXX_STANDARD 17 )
 include_directories( ${PROJECT_ROOT_DIR} )
 
+# Project libraries
+target_link_libraries(
+    Burst PUBLIC
+        Vkt
+)
+
 ### Libraries
 
 # spdlog

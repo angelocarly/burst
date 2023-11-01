@@ -5,5 +5,6 @@ set( PROJECT_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}" )
 
 set( LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib" )
 
+add_subdirectory( vkt )
 add_subdirectory( burst )
 add_subdirectory( example )
