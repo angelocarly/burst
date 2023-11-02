@@ -1,6 +1,6 @@
 # Burst
 ![build](https://github.com/angelocarly/burst/actions/workflows/cmake.yml/badge.svg)  
-Simple C++ rendering library using Vulkan.
+Minimal C++ rendering library using Vulkan.
 
 ## Philosophy
 Burst is a new iteration of [Vakarta](https://github.com/angelocarly/vakarta), my previous attempt at creating a comprehensible Vulkan graphics engine.
