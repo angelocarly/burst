@@ -15,7 +15,10 @@ vkt::Device::Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::In
 
 vkt::Device::~Device()
 {
-
+    mDevice.waitIdle();
+    mAllocator.destroy();
+    mDevice.destroyCommandPool( mCommandPool );
+    mDevice.destroy();
 }
 
 vk::Device
