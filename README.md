@@ -20,6 +20,7 @@ sudo apt-get install -y libspdlog-dev libglfw3-dev
 Secondly, install the [Vulkan SDK](https://vulkan.lunarg.com) and set the path environment variables:
 ```
 export VULKAN_SDK=/path/to/vulkan/sdk
+# Required for MoltenVK
 export VK_ICD_FILENAMES=/path/to/vulkan/sdk/etc/vulkan/icd.d
 ```
 
