@@ -44,3 +44,5 @@ example/Example
 - [spdlog](https://github.com/gabime/spdlog) - Fast header only logging library.
 - [glfw](https://github.com/glfw/glfw) - Cross platform window and input library.
 - [Vulkan SDK](https://vulkan.lunarg.com) - Low level graphics API.
+- [VulkanMemoryAllocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) - Easy to integrate Vulkan memory allocator.
+- [VulkanMemoryAllocator-Hpp](https://github.com/YaaZ/VulkanMemoryAllocator-Hpp) - C++ bindings for VulkanMemoryAllocator.
