@@ -11,6 +11,8 @@ namespace vkt
             Instance( std::vector< const char * > inInstanceExtensions );
             ~Instance() = default;
 
+            vk::Instance GetVkInstance() const;
+
         private:
             void CreateVulkanInstance( std::vector< const char * > inInstanceExtensions );
             void GetDebugUtilsMessengerCreateInfo( vk::DebugUtilsMessengerCreateInfoEXT & inCreateInfo ) const;

@@ -126,3 +126,9 @@ vkt::Instance::CreateVulkanInstance( std::vector< const char * > inInstanceExten
 
     mInstance = vk::createInstance( createInfo );
 }
+
+vk::Instance
+vkt::Instance::GetVkInstance() const
+{
+    return mInstance;
+}

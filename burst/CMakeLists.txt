@@ -1,6 +1,7 @@
 set(
     HEADER_FILES
         Engine.h
+        Utils.h
         VulkanConfig.h
         Window.h
 )
@@ -8,6 +9,7 @@ set(
 set(
     SOURCE_FILES
         Source/Engine.cpp
+        Source/Utils.cpp
         Source/VulkanConfig.cpp
         Source/Window.cpp
 )
@@ -18,7 +20,7 @@ add_library(
         ${HEADER_FILES}
 )
 
-set_property( TARGET ${LIBRARY_OUTPUT_NAME} PROPERTY CXX_STANDARD 17 )
+set_property( TARGET Burst PROPERTY CXX_STANDARD 17 )
 include_directories( ${PROJECT_ROOT_DIR} )
 
 # Project libraries

@@ -5,6 +5,7 @@
 #include "burst/Window.h"
 
 #include "vkt/Instance.h"
+#include "vkt/PhysicalDevice.h"
 
 namespace burst
 {
@@ -19,10 +20,11 @@ namespace burst
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
+            vkt::PhysicalDevice CreatePhysicalDevice( const vkt::Instance & inInstance ) const;
 
             burst::Window mWindow;
             vkt::Instance mInstance;
-
+            vkt::PhysicalDevice mPhysicalDevice;
     };
 }
 

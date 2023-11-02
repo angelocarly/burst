@@ -1,15 +1,22 @@
 #include "burst/Engine.h"
 
 #include "burst/Window.h"
+#include "burst/Utils.h"
+
 #include "vkt/Instance.h"
+#include "vkt/PhysicalDevice.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <vulkan/vulkan.hpp>
+#include <vulkan/vulkan_beta.h>
+
 burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig )
 :
     mWindow( inWidth, inHeight, inTitle ),
-    mInstance( CreateInstance( inVulkanConfig ) )
+    mInstance( CreateInstance( inVulkanConfig ) ),
+    mPhysicalDevice( CreatePhysicalDevice( mInstance ) )
 {
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");
@@ -33,7 +40,8 @@ burst::Engine::Run() const
 
 namespace
 {
-    std::vector< const char * > GetRequiredExtensions( burst::VulkanConfig inVulkanConfig )
+    std::vector< const char * >
+    GetInstanceExtensions( burst::VulkanConfig inVulkanConfig )
     {
         std::vector< const char * > requiredExtensions;
 
@@ -50,6 +58,23 @@ namespace
 
         return requiredExtensions;
     }
+
+    std::vector< const char * >
+    GetDeviceExtensions()
+    {
+        static std::vector< const char * > theExtensions;
+
+        theExtensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+        theExtensions.push_back( VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME );
+
+        if( burst::Utils::IsTargetApple() )
+        {
+            // Allow using a subset of the vulkan api
+            theExtensions.push_back( VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME );
+        }
+
+        return theExtensions;
+    }
 }
 
 vkt::Instance
@@ -64,7 +89,13 @@ burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
     }
 
     // Setup the required instance extensions
-    auto requiredExtensions = GetRequiredExtensions( inVulkanConfig );
+    auto requiredExtensions = GetInstanceExtensions( inVulkanConfig );
 
     return vkt::Instance( requiredExtensions );
+}
+
+vkt::PhysicalDevice
+burst::Engine::CreatePhysicalDevice( vkt::Instance const & inInstance ) const
+{
+    return vkt::PhysicalDevice( inInstance, GetDeviceExtensions() );
 }

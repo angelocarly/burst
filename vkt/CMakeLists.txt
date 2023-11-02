@@ -1,11 +1,15 @@
 set(
     HEADER_FILES
+        Device.h
         Instance.h
+        PhysicalDevice.h
 )
 
 set(
     SOURCE_FILES
+        Source/Device.cpp
         Source/Instance.cpp
+        Source/PhysicalDevice.cpp
 )
 
 add_library(
@@ -14,7 +18,7 @@ add_library(
         ${HEADER_FILES}
 )
 
-set_property( TARGET ${LIBRARY_OUTPUT_NAME} PROPERTY CXX_STANDARD 17 )
+set_property( TARGET Vkt PROPERTY CXX_STANDARD 17 )
 include_directories( ${PROJECT_ROOT_DIR} )
 
 ### Libraries
