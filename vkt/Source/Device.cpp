@@ -4,11 +4,12 @@
 
 #include <spdlog/spdlog.h>
 
-vkt::Device::Device( const vkt::PhysicalDevice & inPhysicalDevice )
+vkt::Device::Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance )
 :
     mDevice( CreateDevice( inPhysicalDevice ) ),
     mQueue( mDevice.getQueue( inPhysicalDevice.FindQueueFamilyIndices().graphicsFamilyIndex.value(), 0 ) ),
-    mCommandPool( CreateCommandPool( inPhysicalDevice ) )
+    mCommandPool( CreateCommandPool( inPhysicalDevice ) ),
+    mAllocator( CreateAllocator( inPhysicalDevice, inInstance ) )
 {
 }
 
@@ -72,4 +73,17 @@ vk::Device
 vkt::Device::GetVkDevice() const
 {
     return mDevice;
+}
+
+vma::Allocator
+vkt::Device::CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance )
+{
+    vma::AllocatorCreateInfo theAllocatorInfo
+    (
+        vma::AllocatorCreateFlags(),
+        inPhysicalDevice.GetVkPhysicalDevice(),
+        mDevice
+    );
+    theAllocatorInfo.instance = inInstance.GetVkInstance();
+    return vma::createAllocator( theAllocatorInfo );
 }

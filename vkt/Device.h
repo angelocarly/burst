@@ -1,16 +1,19 @@
 #ifndef Vkt_Device_h
 #define Vkt_Device_h
 
+#include "vkt/PhysicalDevice.h"
+
 #include <vulkan/vulkan.hpp>
 
-#include "vkt/PhysicalDevice.h"
+#define VMA_IMPLEMENTATION
+#include <vk_mem_alloc.hpp>
 
 namespace vkt
 {
     class Device
     {
         public:
-            explicit Device( const vkt::PhysicalDevice & inPhysicalDevice );
+            explicit Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance );
             ~Device();
 
         public:
@@ -19,11 +22,13 @@ namespace vkt
         private:
             vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice );
             vk::CommandPool CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice );
+            vma::Allocator CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance );
 
         private:
             vk::Device mDevice;
             vk::Queue mQueue;
             vk::CommandPool mCommandPool;
+            vma::Allocator mAllocator;
     };
 }
 

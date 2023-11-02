@@ -21,7 +21,6 @@ namespace burst
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
-            vkt::PhysicalDevice CreatePhysicalDevice( const vkt::Instance & inInstance ) const;
 
             burst::Window mWindow;
             vkt::Instance mInstance;

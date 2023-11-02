@@ -12,33 +12,6 @@
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_beta.h>
 
-burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig )
-:
-    mWindow( inWidth, inHeight, inTitle ),
-    mInstance( CreateInstance( inVulkanConfig ) ),
-    mPhysicalDevice( CreatePhysicalDevice( mInstance ) ),
-    mDevice( mPhysicalDevice )
-{
-    spdlog::set_level(spdlog::level::debug);
-    spdlog::stdout_color_mt("burst");
-
-    spdlog::get( "burst" )->info( "Started engine" );
-}
-
-burst::Engine::~Engine()
-{
-    spdlog::get( "burst" )->info( "Stopped engine" );
-}
-
-void
-burst::Engine::Run() const
-{
-    while( !mWindow.ShouldClose() )
-    {
-        mWindow.Poll();
-    }
-}
-
 namespace
 {
     std::vector< const char * >
@@ -78,6 +51,34 @@ namespace
     }
 }
 
+burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig )
+:
+    mWindow( inWidth, inHeight, inTitle ),
+    mInstance( CreateInstance( inVulkanConfig ) ),
+    mPhysicalDevice( mInstance, GetDeviceExtensions() ),
+    mDevice( mPhysicalDevice, mInstance )
+{
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::stdout_color_mt("burst");
+
+    spdlog::get( "burst" )->info( "Started engine" );
+}
+
+burst::Engine::~Engine()
+{
+    spdlog::get( "burst" )->info( "Stopped engine" );
+}
+
+void
+burst::Engine::Run() const
+{
+    while( !mWindow.ShouldClose() )
+    {
+        mWindow.Poll();
+    }
+}
+
+
 vkt::Instance
 burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
 {
@@ -93,10 +94,4 @@ burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
     auto requiredExtensions = GetInstanceExtensions( inVulkanConfig );
 
     return vkt::Instance( requiredExtensions );
-}
-
-vkt::PhysicalDevice
-burst::Engine::CreatePhysicalDevice( vkt::Instance const & inInstance ) const
-{
-    return vkt::PhysicalDevice( inInstance, GetDeviceExtensions() );
 }
