@@ -1,7 +1,9 @@
 #ifndef Burst_Engine_h
 #define Burst_Engine_h
 
-#include "Window.h"
+#include "burst/VulkanConfig.h"
+#include "burst/Window.h"
+
 #include "vkt/Instance.h"
 
 namespace burst
@@ -9,14 +11,14 @@ namespace burst
     class Engine
     {
         public:
-            Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle );
+            Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig = VulkanConfig() );
             ~Engine();
 
         public:
             void Run() const;
 
         private:
-            vkt::Instance CreateInstance() const;
+            vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
 
             burst::Window mWindow;
             vkt::Instance mInstance;

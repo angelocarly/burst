@@ -1,12 +1,14 @@
 set(
     HEADER_FILES
         Engine.h
+        VulkanConfig.h
         Window.h
 )
 
 set(
     SOURCE_FILES
         Source/Engine.cpp
+        Source/VulkanConfig.cpp
         Source/Window.cpp
 )
 

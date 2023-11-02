@@ -6,10 +6,10 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle )
+burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig )
 :
     mWindow( inWidth, inHeight, inTitle ),
-    mInstance( CreateInstance() )
+    mInstance( CreateInstance( inVulkanConfig ) )
 {
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");
@@ -31,8 +31,29 @@ burst::Engine::Run() const
     }
 }
 
+namespace
+{
+    std::vector< const char * > GetRequiredExtensions( burst::VulkanConfig inVulkanConfig )
+    {
+        std::vector< const char * > requiredExtensions;
+
+        // Load the glfw extensions
+        std::uint32_t glfwExtensionCount = 0;
+        auto glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
+        for( int i = 0; i < glfwExtensionCount; ++i )
+        {
+            requiredExtensions.push_back( glfwExtensions[ i ] );
+        }
+
+        // Append the requested extensions
+        requiredExtensions.insert( requiredExtensions.end(), inVulkanConfig.mInstanceExtensions.begin(), inVulkanConfig.mInstanceExtensions.end() );
+
+        return requiredExtensions;
+    }
+}
+
 vkt::Instance
-burst::Engine::CreateInstance() const
+burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
 {
     // Check glfw Vulkan support
     // Note: GLFW should be initialized before requesting Vulkan support
@@ -42,14 +63,8 @@ burst::Engine::CreateInstance() const
         throw std::runtime_error( "Vulkan not supported" );
     }
 
-    // Get the required extensions
-    std::vector< const char * > requiredExtensions;
-    std::uint32_t mExtensionCount = 0;
-    auto glfwExtensions = glfwGetRequiredInstanceExtensions( &mExtensionCount );
-    for( int i = 0; i < mExtensionCount; ++i )
-    {
-        requiredExtensions.push_back( glfwExtensions[ i ] );
-    }
+    // Setup the required instance extensions
+    auto requiredExtensions = GetRequiredExtensions( inVulkanConfig );
 
     return vkt::Instance( requiredExtensions );
 }
