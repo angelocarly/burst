@@ -4,6 +4,7 @@
 #include "burst/VulkanConfig.h"
 #include "burst/Window.h"
 
+#include "vkt/Device.h"
 #include "vkt/Instance.h"
 #include "vkt/PhysicalDevice.h"
 
@@ -25,6 +26,7 @@ namespace burst
             burst::Window mWindow;
             vkt::Instance mInstance;
             vkt::PhysicalDevice mPhysicalDevice;
+            vkt::Device mDevice;
     };
 }
 

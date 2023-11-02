@@ -49,6 +49,8 @@ namespace
 }
 
 vkt::PhysicalDevice::PhysicalDevice( const vkt::Instance & inInstance, std::vector< const char * > inDeviceExtensions )
+:
+    mDeviceExtensions( inDeviceExtensions )
 {
     spdlog::get( "vkt" )->debug( "Initializing physical device:" );
 
@@ -74,13 +76,19 @@ vkt::PhysicalDevice::~PhysicalDevice()
 }
 
 vk::PhysicalDevice
-vkt::PhysicalDevice::GetVkPhysicalDevice()
+vkt::PhysicalDevice::GetVkPhysicalDevice() const
 {
-    return vk::PhysicalDevice();
+    return mPhysicalDevice;
+}
+
+std::vector< const char * >
+vkt::PhysicalDevice::GetDeviceExtensions() const
+{
+    return mDeviceExtensions;
 }
 
 vkt::QueueFamilyIndices
-vkt::PhysicalDevice::FindQueueFamilyIndices()
+vkt::PhysicalDevice::FindQueueFamilyIndices() const
 {
-    return vkt::QueueFamilyIndices();
+    return ::FindQueueFamilyIndices( mPhysicalDevice );
 }

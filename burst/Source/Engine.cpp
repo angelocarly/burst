@@ -16,7 +16,8 @@ burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * i
 :
     mWindow( inWidth, inHeight, inTitle ),
     mInstance( CreateInstance( inVulkanConfig ) ),
-    mPhysicalDevice( CreatePhysicalDevice( mInstance ) )
+    mPhysicalDevice( CreatePhysicalDevice( mInstance ) ),
+    mDevice( mPhysicalDevice )
 {
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");

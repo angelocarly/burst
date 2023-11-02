@@ -26,11 +26,13 @@ namespace vkt
             ~PhysicalDevice();
 
         public:
-            vk::PhysicalDevice GetVkPhysicalDevice();
-            QueueFamilyIndices FindQueueFamilyIndices();
+            vk::PhysicalDevice GetVkPhysicalDevice() const;
+            QueueFamilyIndices FindQueueFamilyIndices() const;
+            std::vector< const char * > GetDeviceExtensions() const;
 
         private:
             vk::PhysicalDevice mPhysicalDevice;
+            std::vector< const char * > mDeviceExtensions;
     };
 }
 
