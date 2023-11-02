@@ -37,8 +37,11 @@ example/Example
 - [x] ~~Basic dependency setup and documentation~~
 - [x] ~~Integration with a first test implementation~~ See [Borst](https://github.com/angelocarly/borst).
 - [x] ~~Window instantiation~~
-- [x] ~~Vulkan instantiation~~
-- [ ] Test framework
+- [x] ~~Vulkan device instantiation~~
+- [x] ~~Vulkan memory allocator~~
+- [ ] Connect swapchain to the window
+- [ ] ImGui
+- [ ] Test framework (delayed, probably want to have Vulkan working first )
 
 ## Dependencies
 - [spdlog](https://github.com/gabime/spdlog) - Fast header only logging library.
