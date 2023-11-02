@@ -20,9 +20,9 @@ namespace vkt
             vk::Device GetVkDevice() const;
 
         private:
-            vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice );
-            vk::CommandPool CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice );
-            vma::Allocator CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance );
+            vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice ) const;
+            vk::CommandPool CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice ) const;
+            vma::Allocator CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance ) const;
 
         private:
             vk::Device mDevice;

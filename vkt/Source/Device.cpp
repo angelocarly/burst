@@ -22,11 +22,11 @@ vkt::Device::~Device()
 }
 
 vk::Device
-vkt::Device::CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice )
+vkt::Device::CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice ) const
 {
     spdlog::get( "vkt" )->debug( "Initializing logical device." );
 
-    vk::PhysicalDeviceFeatures deviceFeatures = vk::PhysicalDeviceFeatures();
+    auto deviceFeatures = vk::PhysicalDeviceFeatures();
 
     std::array< vk::DeviceQueueCreateInfo, 1 > deviceQueueCreateInfos;
     float queuePriority = 1.0f;
@@ -60,7 +60,7 @@ vkt::Device::CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice )
 }
 
 vk::CommandPool
-vkt::Device::CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice )
+vkt::Device::CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice ) const
 {
     return mDevice.createCommandPool
     (
@@ -72,14 +72,8 @@ vkt::Device::CreateCommandPool( const vkt::PhysicalDevice & inPhysicalDevice )
     );
 }
 
-vk::Device
-vkt::Device::GetVkDevice() const
-{
-    return mDevice;
-}
-
 vma::Allocator
-vkt::Device::CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance )
+vkt::Device::CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance ) const
 {
     vma::AllocatorCreateInfo theAllocatorInfo
     (
@@ -89,4 +83,10 @@ vkt::Device::CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, cons
     );
     theAllocatorInfo.instance = inInstance.GetVkInstance();
     return vma::createAllocator( theAllocatorInfo );
+}
+
+vk::Device
+vkt::Device::GetVkDevice() const
+{
+    return mDevice;
 }
