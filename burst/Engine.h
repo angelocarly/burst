@@ -1,6 +1,7 @@
 #ifndef Burst_Engine_h
 #define Burst_Engine_h
 
+#include "burst/Display.h"
 #include "burst/VulkanConfig.h"
 #include "burst/Window.h"
 
@@ -17,15 +18,18 @@ namespace burst
             ~Engine();
 
         public:
-            void Run() const;
+            void Run();
+            virtual void Update() const = 0;
+            virtual void Render( vk::CommandBuffer inCommandBuffer ) const = 0;
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
 
-            burst::Window mWindow;
             vkt::Instance mInstance;
+            burst::Window mWindow;
             vkt::PhysicalDevice mPhysicalDevice;
             vkt::Device mDevice;
+            burst::Display mDisplay;
     };
 }
 

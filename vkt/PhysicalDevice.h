@@ -1,7 +1,7 @@
 #ifndef Vkt_PhysicalDevice_h
 #define Vkt_PhysicalDevice_h
 
-#include "Instance.h"
+#include "vkt/Instance.h"
 
 #include <vulkan/vulkan.hpp>
 

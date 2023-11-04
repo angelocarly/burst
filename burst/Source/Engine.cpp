@@ -53,10 +53,11 @@ namespace
 
 burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig )
 :
-    mWindow( inWidth, inHeight, inTitle ),
     mInstance( CreateInstance( inVulkanConfig ) ),
+    mWindow( mInstance, inWidth, inHeight, inTitle ),
     mPhysicalDevice( mInstance, GetDeviceExtensions() ),
-    mDevice( mPhysicalDevice, mInstance )
+    mDevice( mPhysicalDevice, mInstance ),
+    mDisplay( mDevice, mWindow )
 {
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");
@@ -70,11 +71,20 @@ burst::Engine::~Engine()
 }
 
 void
-burst::Engine::Run() const
+burst::Engine::Run()
 {
     while( !mWindow.ShouldClose() )
     {
         mWindow.Poll();
+
+        Update();
+
+        mDisplay.Render(
+            [ this ]( vk::CommandBuffer inCommandBuffer )
+            {
+                Render( inCommandBuffer );
+            }
+        );
     }
 }
 
@@ -82,6 +92,7 @@ burst::Engine::Run() const
 vkt::Instance
 burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
 {
+    glfwInit();
     // Check glfw Vulkan support
     // Note: GLFW should be initialized before requesting Vulkan support
     if( glfwVulkanSupported() == GLFW_FALSE )

@@ -1,5 +1,6 @@
 set(
     HEADER_FILES
+        Display.h
         Engine.h
         Utils.h
         VulkanConfig.h
@@ -8,6 +9,7 @@ set(
 
 set(
     SOURCE_FILES
+        Source/Display.cpp
         Source/Engine.cpp
         Source/Utils.cpp
         Source/VulkanConfig.cpp

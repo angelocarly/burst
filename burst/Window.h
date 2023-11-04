@@ -1,6 +1,9 @@
 #ifndef Burst_Window_h
 #define Burst_Window_h
 
+#include "vkt/Instance.h"
+
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 #include <memory>
 
@@ -14,7 +17,7 @@ namespace burst
              * @param width Initial width
              * @param height Initial height
              */
-            Window( int width, int height, const char * title);
+            Window( vkt::Instance & inInstance, int inWidth, int inHeight, const char * inTitle );
             ~Window();
 
         public:
@@ -29,6 +32,8 @@ namespace burst
              * @brief Polls for input and resize events.
              */
             void Poll() const;
+
+            vk::SurfaceKHR GetSurface() const;
 
         private:
             class Impl;

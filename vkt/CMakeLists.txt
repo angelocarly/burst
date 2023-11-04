@@ -1,15 +1,21 @@
 set(
     HEADER_FILES
+        Vma.h
         Device.h
+        ForwardDecl.h
+        Image.h
         Instance.h
         PhysicalDevice.h
+        Swapchain.h
 )
 
 set(
     SOURCE_FILES
         Source/Device.cpp
+        Source/Image.cpp
         Source/Instance.cpp
         Source/PhysicalDevice.cpp
+        Source/Swapchain.cpp
 )
 
 add_library(

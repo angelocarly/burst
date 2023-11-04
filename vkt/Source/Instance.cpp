@@ -1,3 +1,6 @@
+#define VMA_IMPLEMENTATION
+#include "vk_mem_alloc.hpp"
+
 #include "vkt/Instance.h"
 
 #include <vulkan/vulkan.hpp>

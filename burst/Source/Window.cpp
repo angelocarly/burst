@@ -1,4 +1,7 @@
 #include "burst/Window.h"
+#include "vkt/Instance.h"
+
+#include <vulkan/vulkan.hpp>
 
 #include <GLFW/glfw3.h>
 
@@ -9,7 +12,7 @@
 class burst::Window::Impl
 {
     public:
-        Impl( int width, int height, const char * title );
+        Impl( vkt::Instance & inInstance, int inWidth, int inHeight, const char * inTitle );
         ~Impl();
 
         void CreateWindow( int width, int height, const char * title );
@@ -25,11 +28,16 @@ class burst::Window::Impl
 
     public:
         std::unique_ptr< GLFWwindow, DestroyWindow > mWindow;
+        vk::SurfaceKHR mSurface;
+
+    private:
+        vk::SurfaceKHR CreateSurface( vkt::Instance & inInstance );
 };
 
-burst::Window::Impl::Impl(int inWidth, int inHeight, const char * inTitle )
+burst::Window::Impl::Impl( vkt::Instance & inInstance, int inWidth, int inHeight, const char * inTitle )
 {
     CreateWindow( inWidth, inHeight, inTitle );
+    mSurface = CreateSurface( inInstance );
 }
 
 burst::Window::Impl::~Impl() = default;
@@ -46,11 +54,25 @@ burst::Window::Impl::CreateWindow( int width, int height, const char * title)
 
 }
 
+vk::SurfaceKHR
+burst::Window::Impl::CreateSurface( vkt::Instance & inInstance )
+{
+    VkSurfaceKHR theVkSurface;
+    glfwCreateWindowSurface
+    (
+        inInstance.GetVkInstance(),
+        mWindow.get(),
+        nullptr,
+        & theVkSurface
+    );
+    return theVkSurface;
+}
+
 // ============================================== Window ===============================================================
 
-burst::Window::Window( int width, int height, const char * title )
+burst::Window::Window( vkt::Instance & inInstance, int inWidth, int inHeight, const char * inTitle )
 :
-    mImpl( new Impl( width, height, title ) )
+    mImpl( new Impl( inInstance, inWidth, inHeight, inTitle ) )
 {
 }
 
@@ -72,4 +94,10 @@ GLFWwindow *
 burst::Window::GetGLFWWindow()
 {
     return mImpl->mWindow.get();
+}
+
+vk::SurfaceKHR
+burst::Window::GetSurface() const
+{
+    return mImpl->mSurface;
 }
