@@ -155,12 +155,11 @@ vkt::Device::ImageMemoryBarrier
 (
     vk::CommandBuffer inCommandBuffer,
     Image inImage,
+    vk::ImageLayout inNewLayout,
     vk::AccessFlags inSrcAccessMask,
     vk::AccessFlags inDstAccessMask,
     vk::PipelineStageFlags inSrcStageMask,
     vk::PipelineStageFlags inDstStageMask,
-    vk::ImageLayout inOldLayout,
-    vk::ImageLayout inNewLayout,
     vk::DependencyFlags inDependencyFlags
 ) const
 {
@@ -176,7 +175,7 @@ vkt::Device::ImageMemoryBarrier
     (
         inSrcAccessMask,
         inDstAccessMask,
-        inOldLayout,
+        inImage.GetVkImageLayout(),
         inNewLayout,
         VK_QUEUE_FAMILY_IGNORED,
         VK_QUEUE_FAMILY_IGNORED,
@@ -193,4 +192,6 @@ vkt::Device::ImageMemoryBarrier
         nullptr,
         theImageMemoryBarrier
     );
+
+    inImage.SetImageLayout( inNewLayout );
 }

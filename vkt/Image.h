@@ -21,6 +21,8 @@ namespace vkt
         private:
             vk::Image mImage;
             vk::ImageLayout mImageLayout;
+
+        friend class Device;
     };
 }
 

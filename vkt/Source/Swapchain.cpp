@@ -117,12 +117,11 @@ vkt::Swapchain::InitializeSwapchainImages()
             (
                 commandBuffer,
                 image,
+                vk::ImageLayout::ePresentSrcKHR,
                 vk::AccessFlagBits::eNone,
                 vk::AccessFlagBits::eColorAttachmentWrite,
                 vk::PipelineStageFlagBits::eTopOfPipe,
                 vk::PipelineStageFlagBits::eColorAttachmentOutput,
-                vk::ImageLayout::eUndefined,
-                vk::ImageLayout::ePresentSrcKHR,
                 vk::DependencyFlagBits::eByRegion
             );
         }

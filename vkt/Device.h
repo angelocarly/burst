@@ -25,7 +25,7 @@ namespace vkt
 
             std::vector< vkt::Image > GetSwapchainImages( vk::SwapchainKHR & inSwapchain ) const;
 
-            void ImageMemoryBarrier( vk::CommandBuffer inCommandBuffer, Image inImage, vk::AccessFlags inSrcAccessMask, vk::AccessFlags inDstAccessMask, vk::PipelineStageFlags inSrcStageMask, vk::PipelineStageFlags inDstStageMask, vk::ImageLayout inOldLayout, vk::ImageLayout inNewLayout, vk::DependencyFlags inDependencyFlags ) const;
+            void ImageMemoryBarrier( vk::CommandBuffer inCommandBuffer, Image inImage, vk::ImageLayout inNewLayout, vk::AccessFlags inSrcAccessMask, vk::AccessFlags inDstAccessMask, vk::PipelineStageFlags inSrcStageMask, vk::PipelineStageFlags inDstStageMask, vk::DependencyFlags inDependencyFlags ) const;
 
         private:
             vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice ) const;
