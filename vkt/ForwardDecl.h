@@ -15,6 +15,9 @@ namespace vkt
     class GraphicsPipeline;
     using GraphicsPipelinePtr = std::shared_ptr< GraphicsPipeline >;
 
+    class RenderPass;
+    using RenderPassPtr = std::shared_ptr< RenderPass >;
+
 }
 
 #endif

@@ -8,6 +8,7 @@ set(
         Image.h
         Instance.h
         PhysicalDevice.h
+        RenderPass.h
         Shader.h
         Swapchain.h
 )
@@ -20,6 +21,7 @@ set(
         Source/Image.cpp
         Source/Instance.cpp
         Source/PhysicalDevice.cpp
+        Source/RenderPass.cpp
         Source/Shader.cpp
         Source/Swapchain.cpp
 )

@@ -6,6 +6,7 @@
 #include "vkt/DescriptorSetLayout.h"
 #include "vkt/Swapchain.h"
 #include "vkt/GraphicsPipeline.h"
+#include "vkt/RenderPass.h"
 
 namespace burst
 {
@@ -31,13 +32,12 @@ namespace burst
             void InitializeRenderPass();
             void InitializePipeline( vk::RenderPass inRenderPass );
             void InitializeFrameBuffers();
-            vk::RenderPassBeginInfo CreateRenderPassBeginInfo( std::size_t inFrameIndex );
 
             vkt::Device const & mDevice;
             vkt::Swapchain mSwapchain;
             std::vector< vk::CommandBuffer > mCommandBuffers;
 
-            vk::RenderPass mRenderPass;
+            vkt::RenderPassPtr mRenderPass;
             vk::ClearColorValue mClearColor;
             vk::ClearValue mClearValue;
             std::vector< vk::Framebuffer > mFramebuffers;

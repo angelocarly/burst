@@ -3,6 +3,7 @@
 #include "vkt/GraphicsPipeline.h"
 #include "vkt/Shader.h"
 #include "vkt/DescriptorSetLayout.h"
+#include "vkt/RenderPass.h"
 
 burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inWindow )
 :
@@ -18,13 +19,12 @@ burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inW
     InitializeCommandBuffers();
     InitializeRenderPass();
     InitializeFrameBuffers();
-    InitializePipeline( mRenderPass );
+    InitializePipeline( mRenderPass->GetVkRenderPass() );
 }
 
 burst::Display::~Display()
 {
     mDevice.GetVkDevice().waitIdle();
-    mDevice.GetVkDevice().destroy( mRenderPass );
     for( auto framebuffer : mFramebuffers )
     {
         mDevice.GetVkDevice().destroy( framebuffer );
@@ -47,7 +47,7 @@ burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inCompute
          */
         inComputeCallback( commandBuffer );
 
-        commandBuffer.beginRenderPass( CreateRenderPassBeginInfo( theFrameIndex ), vk::SubpassContents::eInline );
+        mRenderPass->Begin( commandBuffer, mFramebuffers[ theFrameIndex ], vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
         {
             // Set dynamic state
             commandBuffer.setViewport( 0, vk::Viewport( 0.0f, 0.0f, mSwapchain.GetExtent().width, mSwapchain.GetExtent().height, 0.0f, 1.0f ) );
@@ -88,70 +88,7 @@ burst::Display::InitializeCommandBuffers()
 void
 burst::Display::InitializeRenderPass()
 {
-    auto theColorAttachmentReference = vk::AttachmentReference
-    (
-        0,
-        vk::ImageLayout::eColorAttachmentOptimal
-    );
-
-    auto theSubpassDescription = vk::SubpassDescription
-    (
-        vk::SubpassDescriptionFlags(),
-        vk::PipelineBindPoint::eGraphics,
-        0,
-        nullptr,
-        1,
-        & theColorAttachmentReference,
-        nullptr,
-        nullptr,
-        0,
-        nullptr
-    );
-
-    // The depth attachment is first accessed in the early fragment stage.
-    std::array< vk::SubpassDependency, 1 > theSubPassDependencies;
-    theSubPassDependencies[ 0 ].setSrcSubpass( VK_SUBPASS_EXTERNAL );
-    theSubPassDependencies[ 0 ].setDstSubpass( 0 );
-    theSubPassDependencies[ 0 ].setSrcStageMask( vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests );
-    theSubPassDependencies[ 0 ].setSrcAccessMask( vk::AccessFlagBits::eNone );
-    theSubPassDependencies[ 0 ].setDstStageMask( vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests );
-    theSubPassDependencies[ 0 ].setDstAccessMask( vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite );
-
-    auto theColorAttachmentDescription = vk::AttachmentDescription
-    (
-        vk::AttachmentDescriptionFlags(),
-        mSwapchain.GetImageFormat(),
-        vk::SampleCountFlagBits::e1,
-        vk::AttachmentLoadOp::eClear,
-        vk::AttachmentStoreOp::eStore,
-        vk::AttachmentLoadOp::eDontCare,
-        vk::AttachmentStoreOp::eDontCare,
-        vk::ImageLayout::eUndefined,
-        vk::ImageLayout::ePresentSrcKHR
-    );
-
-    std::vector< vk::AttachmentDescription > theAttachmentDescriptions =
-    {
-        theColorAttachmentDescription
-    };
-    auto theRenderPassCreateInfo = vk::RenderPassCreateInfo
-    (
-        vk::RenderPassCreateFlags(),
-        theAttachmentDescriptions.size(),
-        theAttachmentDescriptions.data(),
-        1,
-        &theSubpassDescription,
-        theSubPassDependencies.size(),
-        theSubPassDependencies.data()
-    );
-
-    mRenderPass = mDevice.GetVkDevice().createRenderPass
-    (
-        theRenderPassCreateInfo
-    );
-
-    mClearColor = vk::ClearColorValue( std::array< float, 4 >{ 0.0f, 0.0f, 0.0f, 1.0f } );
-    mClearValue = vk::ClearValue( mClearColor );
+    mRenderPass = std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() );
 }
 
 void
@@ -169,7 +106,7 @@ burst::Display::InitializeFrameBuffers()
         auto theFrameBufferCreateInfo = vk::FramebufferCreateInfo
         (
             vk::FramebufferCreateFlags(),
-            mRenderPass,
+            mRenderPass->GetVkRenderPass(),
             theAttachments.size(),
             theAttachments.data(),
             mSwapchain.GetExtent().width,
@@ -195,18 +132,4 @@ burst::Display::InitializePipeline( vk::RenderPass inRenderPass )
 
     mDevice.GetVkDevice().destroy( vertexShader );
     mDevice.GetVkDevice().destroy( fragmentShader );
-}
-
-vk::RenderPassBeginInfo
-burst::Display::CreateRenderPassBeginInfo( std::size_t inFrameIndex )
-{
-    auto theRenderPassBeginInfo = vk::RenderPassBeginInfo
-    (
-        mRenderPass,
-        mFramebuffers[ inFrameIndex ],
-        vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ),
-        1,
-        &mClearValue
-    );
-    return theRenderPassBeginInfo;
 }
