@@ -1,9 +1,10 @@
 #include "burst/Display.h"
 
-#include "vkt/GraphicsPipeline.h"
-#include "vkt/Shader.h"
 #include "vkt/DescriptorSetLayout.h"
+#include "vkt/FrameBuffer.h"
+#include "vkt/GraphicsPipeline.h"
 #include "vkt/RenderPass.h"
+#include "vkt/Shader.h"
 
 burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inWindow )
 :
@@ -17,18 +18,15 @@ burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inW
 
 {
     InitializeCommandBuffers();
-    InitializeRenderPass();
+    mRenderPass = std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() );
     InitializeFrameBuffers();
     InitializePipeline( mRenderPass->GetVkRenderPass() );
 }
 
 burst::Display::~Display()
 {
+    // Wait until all rendering is done
     mDevice.GetVkDevice().waitIdle();
-    for( auto framebuffer : mFramebuffers )
-    {
-        mDevice.GetVkDevice().destroy( framebuffer );
-    }
 }
 
 void
@@ -47,7 +45,7 @@ burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inCompute
          */
         inComputeCallback( commandBuffer );
 
-        mRenderPass->Begin( commandBuffer, mFramebuffers[ theFrameIndex ], vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
+        mRenderPass->Begin( commandBuffer, mFramebuffers[ theFrameIndex ]->GetVkFramebuffer(), vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
         {
             // Set dynamic state
             commandBuffer.setViewport( 0, vk::Viewport( 0.0f, 0.0f, mSwapchain.GetExtent().width, mSwapchain.GetExtent().height, 0.0f, 1.0f ) );
@@ -86,12 +84,6 @@ burst::Display::InitializeCommandBuffers()
 }
 
 void
-burst::Display::InitializeRenderPass()
-{
-    mRenderPass = std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() );
-}
-
-void
 burst::Display::InitializeFrameBuffers()
 {
     auto theSwapchainImageViews = mSwapchain.GetImageViews();
@@ -99,21 +91,18 @@ burst::Display::InitializeFrameBuffers()
 
     for ( size_t i = 0; i < mFramebuffers.size(); i++)
     {
-        std::array< vk::ImageView, 1 > theAttachments =
+        std::vector< vk::ImageView > theAttachments =
         {
             theSwapchainImageViews[ i ]
         };
-        auto theFrameBufferCreateInfo = vk::FramebufferCreateInfo
+        mFramebuffers[i] = std::make_shared< vkt::FrameBuffer >
         (
-            vk::FramebufferCreateFlags(),
-            mRenderPass->GetVkRenderPass(),
-            theAttachments.size(),
-            theAttachments.data(),
+            mDevice,
+            mRenderPass,
+            theAttachments,
             mSwapchain.GetExtent().width,
-            mSwapchain.GetExtent().height,
-            1
+            mSwapchain.GetExtent().height
         );
-        mFramebuffers[i] = mDevice.GetVkDevice().createFramebuffer( theFrameBufferCreateInfo );
     }
 }
 

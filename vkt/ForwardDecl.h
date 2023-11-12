@@ -10,6 +10,9 @@ namespace vkt
     class DescriptorSetLayouts;
     using DescriptorSetLayoutsPtr = std::shared_ptr< DescriptorSetLayouts >;
 
+    class FrameBuffer;
+    using FrameBufferPtr = std::shared_ptr< FrameBuffer >;
+
     class Image;
 
     class GraphicsPipeline;
@@ -17,7 +20,6 @@ namespace vkt
 
     class RenderPass;
     using RenderPassPtr = std::shared_ptr< RenderPass >;
-
 }
 
 #endif

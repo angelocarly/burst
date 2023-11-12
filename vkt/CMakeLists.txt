@@ -4,6 +4,7 @@ set(
         Device.h
         DescriptorSetLayout.h
         ForwardDecl.h
+        FrameBuffer.h
         GraphicsPipeline.h
         Image.h
         Instance.h
@@ -17,6 +18,7 @@ set(
     SOURCE_FILES
         Source/Device.cpp
         Source/DescriptorSetLayout.cpp
+        Source/FrameBuffer.cpp
         Source/GraphicsPipeline.cpp
         Source/Image.cpp
         Source/Instance.cpp

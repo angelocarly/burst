@@ -29,7 +29,6 @@ namespace burst
 
         private:
             void InitializeCommandBuffers();
-            void InitializeRenderPass();
             void InitializePipeline( vk::RenderPass inRenderPass );
             void InitializeFrameBuffers();
 
@@ -40,7 +39,7 @@ namespace burst
             vkt::RenderPassPtr mRenderPass;
             vk::ClearColorValue mClearColor;
             vk::ClearValue mClearValue;
-            std::vector< vk::Framebuffer > mFramebuffers;
+            std::vector< vkt::FrameBufferPtr > mFramebuffers;
 
             vkt::DescriptorSetLayoutsPtr mDescriptorSetLayout;
             vkt::GraphicsPipelinePtr mPipeline;

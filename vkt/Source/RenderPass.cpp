@@ -1,13 +1,3 @@
-/**
- * RenderPass.cpp
- *
- * @file	RenderPass.cpp
- * @author	Angelo Carly
- * @date	12/11/2023
- *
- * Copyright (c) 2023 Hybrid Software Development. All rights reserved.
- */
-
 #include "vkt/RenderPass.h"
 
 vkt::RenderPass::RenderPass( const vkt::Device & inDevice, vk::Format inImageFormat )
