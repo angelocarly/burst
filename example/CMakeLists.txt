@@ -1,10 +1,12 @@
 set(
-    SOURCE_FILES
-        main.cpp
+    HEADER_FILES
+        TestPresenter.h
 )
 
 set(
-    HEADER_FILES
+    SOURCE_FILES
+        Source/TestPresenter.cpp
+        main.cpp
 )
 
 add_executable(

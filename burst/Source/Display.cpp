@@ -1,26 +1,29 @@
 #include "burst/Display.h"
 
+#include "burst/Presenter.h"
+
 #include "vkt/DescriptorSetLayout.h"
 #include "vkt/FrameBuffer.h"
-#include "vkt/GraphicsPipeline.h"
 #include "vkt/RenderPass.h"
-#include "vkt/Shader.h"
 
 burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inWindow )
 :
     mDevice( inDevice ),
     mSwapchain( inDevice, inWindow.GetSurface() ),
-    mDescriptorSetLayout(
-        vkt::DescriptorSetLayoutBuilder( mDevice )
-            .AddLayoutBinding( 0, vk::DescriptorType::eCombinedImageSampler, vk::ShaderStageFlagBits::eFragment )
-            .Build( vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR )
+    mRenderPass( std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() ) ),
+    mPresentContext(
+        burst::PresentContext
+        {
+            mDevice,
+            mRenderPass,
+            mSwapchain.GetExtent().width,
+            mSwapchain.GetExtent().height
+        }
     )
 
 {
     InitializeCommandBuffers();
-    mRenderPass = std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() );
     InitializeFrameBuffers();
-    InitializePipeline( mRenderPass->GetVkRenderPass() );
 }
 
 burst::Display::~Display()
@@ -30,7 +33,7 @@ burst::Display::~Display()
 }
 
 void
-burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inComputeCallback, std::function<void(vk::CommandBuffer const &)> inPresentCallback  )
+burst::Display::Render( burst::Presenter const & inPresenter )
 {
     std::uint32_t theFrameIndex = mSwapchain.RetrieveNextImage();
 
@@ -43,7 +46,7 @@ burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inCompute
         /*
          * Process compute commands
          */
-        inComputeCallback( commandBuffer );
+        inPresenter.Compute( commandBuffer );
 
         mRenderPass->Begin( commandBuffer, mFramebuffers[ theFrameIndex ]->GetVkFramebuffer(), vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
         {
@@ -51,15 +54,7 @@ burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inCompute
             commandBuffer.setViewport( 0, vk::Viewport( 0.0f, 0.0f, mSwapchain.GetExtent().width, mSwapchain.GetExtent().height, 0.0f, 1.0f ) );
             commandBuffer.setScissor( 0, vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ) );
 
-            // Draw screen rect
-            mPipeline->Bind( commandBuffer );
-            commandBuffer.draw( 3, 1, 0, 0 );
-
-            /*
-             * Process present commands
-             * TODO: How should the interface to Display look?
-             */
-            inPresentCallback( commandBuffer );
+            inPresenter.Present( commandBuffer );
 
         }
         commandBuffer.endRenderPass();
@@ -106,19 +101,8 @@ burst::Display::InitializeFrameBuffers()
     }
 }
 
-void
-burst::Display::InitializePipeline( vk::RenderPass inRenderPass )
+burst::PresentContext const &
+burst::Display::GetPresentContext() const
 {
-    auto vertexShader = vkt::Shader::CreateVkShaderModule( mDevice, "resources/shaders/ScreenRect.vert" );
-    auto fragmentShader = vkt::Shader::CreateVkShaderModule( mDevice, "resources/shaders/Sampler.frag" );
-
-    mPipeline = vkt::GraphicsPipelineBuilder( mDevice )
-        .SetDescriptorSetLayouts( mDescriptorSetLayout )
-        .SetVertexShader( vertexShader )
-        .SetFragmentShader( fragmentShader )
-        .SetRenderPass( inRenderPass )
-        .Build();
-
-    mDevice.GetVkDevice().destroy( vertexShader );
-    mDevice.GetVkDevice().destroy( fragmentShader );
+    return mPresentContext;
 }

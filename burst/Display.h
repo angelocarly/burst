@@ -3,6 +3,8 @@
 
 #include "burst/Window.h"
 
+#include "burst/Presenter.h"
+
 #include "vkt/DescriptorSetLayout.h"
 #include "vkt/Swapchain.h"
 #include "vkt/GraphicsPipeline.h"
@@ -19,17 +21,16 @@ namespace burst
             Display( vkt::Device const & inDevice, burst::Window const & inWindow );
             ~Display();
 
+            burst::PresentContext const & GetPresentContext() const;
+
         public:
             /**
              * @brief Renders a frame to the display.
-             * @param inComputeCallback A callback that will be called before the present callback. This is where you should record your compute commands.
-             * @param inPresentCallback A callback that will be called during the frame's renderpass. This is where you should record your present commands. Don't start new renderpasses here.
              */
-            void Render( std::function<void(vk::CommandBuffer const &)> inComputeCallback, std::function<void(vk::CommandBuffer const &)> inPresentCallback  );
+            void Render( burst::Presenter const & inPresenter );
 
         private:
             void InitializeCommandBuffers();
-            void InitializePipeline( vk::RenderPass inRenderPass );
             void InitializeFrameBuffers();
 
             vkt::Device const & mDevice;
@@ -41,8 +42,7 @@ namespace burst
             vk::ClearValue mClearValue;
             std::vector< vkt::FrameBufferPtr > mFramebuffers;
 
-            vkt::DescriptorSetLayoutsPtr mDescriptorSetLayout;
-            vkt::GraphicsPipelinePtr mPipeline;
+            PresentContext mPresentContext;
     };
 }
 

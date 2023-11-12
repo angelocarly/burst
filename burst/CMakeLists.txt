@@ -2,6 +2,7 @@ set(
     HEADER_FILES
         Display.h
         Engine.h
+        Presenter.h
         Utils.h
         VulkanConfig.h
         Window.h

@@ -79,16 +79,7 @@ burst::Engine::Run()
 
         Update();
 
-        mDisplay.Render(
-            []( vk::CommandBuffer )
-            {
-                // Do nothing
-            },
-            [ this ]( vk::CommandBuffer inCommandBuffer )
-            {
-                Render( inCommandBuffer );
-            }
-        );
+        mDisplay.Render( GetPresenter() );
     }
 }
 
@@ -109,4 +100,10 @@ burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
     auto requiredExtensions = GetInstanceExtensions( inVulkanConfig );
 
     return vkt::Instance( requiredExtensions );
+}
+
+burst::PresentContext const &
+burst::Engine::GetPresentContext()
+{
+    return mDisplay.GetPresentContext();
 }

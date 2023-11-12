@@ -19,8 +19,10 @@ namespace burst
 
         public:
             void Run();
+            burst::PresentContext const & GetPresentContext();
+
             virtual void Update() const = 0;
-            virtual void Render( vk::CommandBuffer inCommandBuffer ) const = 0;
+            virtual burst::Presenter & GetPresenter() const = 0;
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;

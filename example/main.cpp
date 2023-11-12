@@ -2,6 +2,8 @@
 
 #include "burst/Engine.h"
 
+#include "TestPresenter.h"
+
 class ExampleEngine
 :
     public burst::Engine
@@ -9,7 +11,8 @@ class ExampleEngine
     public:
         ExampleEngine( std::size_t inWidth, std::size_t inHeight, const char * inTitle )
         :
-            burst::Engine( inWidth, inHeight, inTitle )
+            burst::Engine( inWidth, inHeight, inTitle ),
+            mPresenter( GetPresentContext() )
         {
         }
 
@@ -17,10 +20,13 @@ class ExampleEngine
         {
         }
 
-        virtual void Render( vk::CommandBuffer inCommandBuffer ) const override
+        virtual burst::Presenter & GetPresenter() const override
         {
+            return ( burst::Presenter & ) mPresenter;
         }
 
+    private:
+        example::TestPresenter mPresenter;
 };
 
 int main()
