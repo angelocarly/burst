@@ -24,8 +24,14 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install dependencies
-      run: sudo apt-get install -y libspdlog-dev libglfw3-dev
+    - name: Install spdlog
+      run: sudo apt-get install -y libspdlog-dev 
+
+    - name: Install glfw
+      run: sudo apt-get install -y libglfw3-dev
+
+    - name: Install glslang
+      run: sudo apt-get install -y glslang-tools
 
     - name: Install Vulkan SDK
       uses: humbletim/install-vulkan-sdk@v1.1.1
