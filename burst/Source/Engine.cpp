@@ -80,6 +80,10 @@ burst::Engine::Run()
         Update();
 
         mDisplay.Render(
+            []( vk::CommandBuffer )
+            {
+                // Do nothing
+            },
             [ this ]( vk::CommandBuffer inCommandBuffer )
             {
                 Render( inCommandBuffer );

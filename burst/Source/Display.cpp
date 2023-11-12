@@ -1,17 +1,29 @@
 #include "burst/Display.h"
 
+#include "vkt/GraphicsPipeline.h"
+#include "vkt/Shader.h"
+#include "vkt/DescriptorSetLayout.h"
+
 burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inWindow )
 :
     mDevice( inDevice ),
-    mSwapchain( inDevice, inWindow.GetSurface() )
+    mSwapchain( inDevice, inWindow.GetSurface() ),
+    mDescriptorSetLayout(
+        vkt::DescriptorSetLayoutBuilder( mDevice )
+            .AddLayoutBinding( 0, vk::DescriptorType::eCombinedImageSampler, vk::ShaderStageFlagBits::eFragment )
+            .Build( vk::DescriptorSetLayoutCreateFlagBits::ePushDescriptorKHR )
+    )
+
 {
     InitializeCommandBuffers();
     InitializeRenderPass();
     InitializeFrameBuffers();
+    InitializePipeline( mRenderPass );
 }
 
 burst::Display::~Display()
 {
+    mDevice.GetVkDevice().waitIdle();
     mDevice.GetVkDevice().destroy( mRenderPass );
     for( auto framebuffer : mFramebuffers )
     {
@@ -20,19 +32,43 @@ burst::Display::~Display()
 }
 
 void
-burst::Display::Render( std::function<void( vk::CommandBuffer const & )> inRenderCallback )
+burst::Display::Render( std::function<void(vk::CommandBuffer const &)> inComputeCallback, std::function<void(vk::CommandBuffer const &)> inPresentCallback  )
 {
     std::uint32_t theFrameIndex = mSwapchain.RetrieveNextImage();
 
     // Begin the current frame's draw commands
-    auto theCommandBuffer = mCommandBuffers[ theFrameIndex ];
-    theCommandBuffer.begin( vk::CommandBufferBeginInfo( vk::CommandBufferUsageFlags() ) );
+    auto commandBuffer = mCommandBuffers[ theFrameIndex ];
+    commandBuffer.begin( vk::CommandBufferBeginInfo( vk::CommandBufferUsageFlags() ) );
     {
-        inRenderCallback( theCommandBuffer );
-    }
-    theCommandBuffer.end();
+        auto image = mSwapchain.GetImages()[ theFrameIndex ];
 
-    mSwapchain.SubmitCommandBuffer( theFrameIndex, theCommandBuffer );
+        /*
+         * Process compute commands
+         */
+        inComputeCallback( commandBuffer );
+
+        commandBuffer.beginRenderPass( CreateRenderPassBeginInfo( theFrameIndex ), vk::SubpassContents::eInline );
+        {
+            // Set dynamic state
+            commandBuffer.setViewport( 0, vk::Viewport( 0.0f, 0.0f, mSwapchain.GetExtent().width, mSwapchain.GetExtent().height, 0.0f, 1.0f ) );
+            commandBuffer.setScissor( 0, vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ) );
+
+            // Draw screen rect
+            mPipeline->Bind( commandBuffer );
+            commandBuffer.draw( 3, 1, 0, 0 );
+
+            /*
+             * Process present commands
+             * TODO: How should the interface to Display look?
+             */
+            inPresentCallback( commandBuffer );
+
+        }
+        commandBuffer.endRenderPass();
+    }
+    commandBuffer.end();
+
+    mSwapchain.SubmitCommandBuffer( theFrameIndex, commandBuffer );
 }
 
 void
@@ -142,4 +178,35 @@ burst::Display::InitializeFrameBuffers()
         );
         mFramebuffers[i] = mDevice.GetVkDevice().createFramebuffer( theFrameBufferCreateInfo );
     }
+}
+
+void
+burst::Display::InitializePipeline( vk::RenderPass inRenderPass )
+{
+    auto vertexShader = vkt::Shader::CreateVkShaderModule( mDevice, "resources/shaders/ScreenRect.vert" );
+    auto fragmentShader = vkt::Shader::CreateVkShaderModule( mDevice, "resources/shaders/Sampler.frag" );
+
+    mPipeline = vkt::GraphicsPipelineBuilder( mDevice )
+        .SetDescriptorSetLayouts( mDescriptorSetLayout )
+        .SetVertexShader( vertexShader )
+        .SetFragmentShader( fragmentShader )
+        .SetRenderPass( inRenderPass )
+        .Build();
+
+    mDevice.GetVkDevice().destroy( vertexShader );
+    mDevice.GetVkDevice().destroy( fragmentShader );
+}
+
+vk::RenderPassBeginInfo
+burst::Display::CreateRenderPassBeginInfo( std::size_t inFrameIndex )
+{
+    auto theRenderPassBeginInfo = vk::RenderPassBeginInfo
+    (
+        mRenderPass,
+        mFramebuffers[ inFrameIndex ],
+        vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ),
+        1,
+        &mClearValue
+    );
+    return theRenderPassBeginInfo;
 }

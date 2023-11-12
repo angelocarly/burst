@@ -11,8 +11,16 @@ namespace vkt
 {
     class Device
     {
+        private:
+//            Device( const Device& ) = delete; // non construction-copyable
+
         public:
             explicit Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance );
+            Device& operator=( const Device& )
+            {
+                return *this;
+            }
+
             ~Device();
 
         public:

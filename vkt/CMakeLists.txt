@@ -2,19 +2,25 @@ set(
     HEADER_FILES
         Vma.h
         Device.h
+        DescriptorSetLayout.h
         ForwardDecl.h
+        GraphicsPipeline.h
         Image.h
         Instance.h
         PhysicalDevice.h
+        Shader.h
         Swapchain.h
 )
 
 set(
     SOURCE_FILES
         Source/Device.cpp
+        Source/DescriptorSetLayout.cpp
+        Source/GraphicsPipeline.cpp
         Source/Image.cpp
         Source/Instance.cpp
         Source/PhysicalDevice.cpp
+        Source/Shader.cpp
         Source/Swapchain.cpp
 )
 

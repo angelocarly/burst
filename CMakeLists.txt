@@ -8,6 +8,8 @@ set( LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib" )
 include_directories( "lib/VulkanMemoryAllocator-Hpp/include")
 include_directories( "lib/VulkanMemoryAllocator/include")
 
+add_subdirectory( resources )
+
 add_subdirectory( vkt )
 add_subdirectory( burst )
 add_subdirectory( example )

@@ -22,3 +22,5 @@ target_link_libraries(
 )
 
 include_directories( ${PROJECT_ROOT_DIR} )
+
+install_burst_resources( Example )
