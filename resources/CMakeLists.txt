@@ -1,3 +1,4 @@
+
 ### Shaders
 
 set(
@@ -36,13 +37,8 @@ function( install_burst_resources project_name )
     add_dependencies( ${project_name} Shaders )
     add_custom_command(
             TARGET ${project_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${project_name}>/resources
-            COMMENT "Creating resources directory"
-    )
-    add_custom_command(
-            TARGET ${project_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/resources/shaders $<TARGET_FILE_DIR:${project_name}>/resources/shaders
+            COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/resources $<TARGET_FILE_DIR:${project_name}>/resources
             DEPENDS Shaders
-            COMMENT "Copying shaders"
+            COMMENT "Creating resources symlink"
     )
 endfunction()
