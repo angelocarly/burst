@@ -33,6 +33,12 @@ add_custom_target(
         DEPENDS ${SPIRV_BINARY_FILES}
 )
 
+add_custom_command(
+        TARGET Shaders PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/shaders
+        COMMENT "Creating shader directory"
+)
+
 function( install_burst_resources project_name )
     add_dependencies( ${project_name} Shaders )
     add_custom_command(
