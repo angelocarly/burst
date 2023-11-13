@@ -1,6 +1,7 @@
 set(
     HEADER_FILES
         Vma.h
+        ComputePipeline.h
         Device.h
         DescriptorSetLayout.h
         ForwardDecl.h
@@ -16,6 +17,7 @@ set(
 
 set(
     SOURCE_FILES
+        Source/ComputePipeline.cpp
         Source/Device.cpp
         Source/DescriptorSetLayout.cpp
         Source/FrameBuffer.cpp

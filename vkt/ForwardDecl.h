@@ -5,6 +5,9 @@
 
 namespace vkt
 {
+    class ComputePipeline;
+    using ComputePipelinePtr = std::shared_ptr< ComputePipeline >;
+
     class Device;
 
     class DescriptorSetLayouts;
