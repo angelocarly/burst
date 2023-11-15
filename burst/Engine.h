@@ -32,6 +32,7 @@ namespace burst
             vkt::PhysicalDevice mPhysicalDevice;
             vkt::Device mDevice;
             burst::Display mDisplay;
+
     };
 }
 

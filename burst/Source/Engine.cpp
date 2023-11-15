@@ -73,13 +73,42 @@ burst::Engine::~Engine()
 void
 burst::Engine::Run()
 {
+    auto previousSecond = std::chrono::duration_cast<std::chrono::microseconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    std::chrono::microseconds frameTime = std::chrono::duration_cast<std::chrono::microseconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    std::chrono::microseconds previousFrameTime = frameTime;
+    std::size_t frameCount;
+
     while( !mWindow.ShouldClose() )
     {
+        frameCount++;
+
+        previousFrameTime = frameTime;
+        frameTime = std::chrono::duration_cast<std::chrono::microseconds>
+        (
+            std::chrono::system_clock::now().time_since_epoch()
+        );
+        float theFrameDuration = ( frameTime.count() - previousFrameTime.count() ) % 10000000000 / 1000000.0f;
+
         mWindow.Poll();
 
         Update();
 
         mDisplay.Render( GetPresenter() );
+
+        float theSecondDuration = ( frameTime.count() - previousSecond.count() ) % 10000000000 / 1000000.0f;
+        if( theSecondDuration > 1 )
+        {
+            previousSecond = frameTime;
+            auto fps = frameCount;
+            frameCount = 0;
+            spdlog::info( "FPS: {}", fps );
+        }
     }
 }
 
