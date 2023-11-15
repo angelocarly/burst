@@ -19,7 +19,7 @@ namespace vkt
             vk::Format GetImageFormat() const { return vk::Format::eB8G8R8A8Srgb; };
             vk::ColorSpaceKHR GetColorSpace() const { return vk::ColorSpaceKHR::eSrgbNonlinear; };
             std::vector< vk::ImageView > const & GetImageViews() const { return mSwapchainImageViews; };
-            std::vector< vkt::Image > const & GetImages() const { return mSwapchainImages; };
+            std::vector< vkt::ImagePtr > const & GetImages() const { return mSwapchainImages; };
             vk::Extent2D GetExtent() const;
 
         private:
@@ -29,7 +29,7 @@ namespace vkt
 
             const vkt::Device & mDevice;
             vk::SwapchainKHR mSwapchain;
-            std::vector< vkt::Image > mSwapchainImages;
+            std::vector< vkt::ImagePtr > mSwapchainImages;
             std::vector< vk::ImageView > mSwapchainImageViews;
             vk::Extent2D mExtent;
 

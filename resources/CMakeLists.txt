@@ -5,6 +5,7 @@ set(
     GLSL_SOURCE_FILES
         shaders/ScreenRect.vert
         shaders/Sampler.frag
+        shaders/Compute.comp
 )
 
 if(LINUX)

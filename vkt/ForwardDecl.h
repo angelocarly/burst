@@ -17,6 +17,7 @@ namespace vkt
     using FrameBufferPtr = std::shared_ptr< FrameBuffer >;
 
     class Image;
+    using ImagePtr = std::shared_ptr< Image >;
 
     class GraphicsPipeline;
     using GraphicsPipelinePtr = std::shared_ptr< GraphicsPipeline >;

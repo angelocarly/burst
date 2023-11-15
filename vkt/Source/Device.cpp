@@ -1,7 +1,4 @@
-
 #include "vkt/Device.h"
-
-#include "vkt/Image.h"
 
 #include <spdlog/spdlog.h>
 
@@ -111,6 +108,13 @@ vkt::Device::GetVkCommandPool() const
     return mCommandPool;
 }
 
+vma::Allocator
+vkt::Device::GetVmaAllocator() const
+{
+    return mAllocator;
+}
+
+
 // =====================================================================================================================
 
 vk::CommandBuffer
@@ -138,60 +142,3 @@ vkt::Device::EndSingleTimeCommands( vk::CommandBuffer & inCommandBuffer ) const
     mDevice.freeCommandBuffers( mCommandPool, inCommandBuffer );
 }
 
-std::vector< vkt::Image >
-vkt::Device::GetSwapchainImages( vk::SwapchainKHR & inSwapchain ) const
-{
-    auto swapchainImages = mDevice.getSwapchainImagesKHR( inSwapchain );
-    std::vector< vkt::Image > images;
-    for( auto swapchainImage : swapchainImages )
-    {
-        images.emplace_back( swapchainImage );
-    }
-    return images;
-}
-
-void
-vkt::Device::ImageMemoryBarrier
-(
-    vk::CommandBuffer inCommandBuffer,
-    Image inImage,
-    vk::ImageLayout inNewLayout,
-    vk::AccessFlags inSrcAccessMask,
-    vk::AccessFlags inDstAccessMask,
-    vk::PipelineStageFlags inSrcStageMask,
-    vk::PipelineStageFlags inDstStageMask,
-    vk::DependencyFlags inDependencyFlags
-) const
-{
-    vk::ImageSubresourceRange theImageSubResourceRange
-    (
-        vk::ImageAspectFlagBits::eColor,
-        0,
-        1,
-        0,
-        1
-    );
-    vk::ImageMemoryBarrier theImageMemoryBarrier
-    (
-        inSrcAccessMask,
-        inDstAccessMask,
-        inImage.GetVkImageLayout(),
-        inNewLayout,
-        VK_QUEUE_FAMILY_IGNORED,
-        VK_QUEUE_FAMILY_IGNORED,
-        inImage.GetVkImage(),
-        theImageSubResourceRange,
-        nullptr
-    );
-    inCommandBuffer.pipelineBarrier
-    (
-        inSrcStageMask,
-        inDstStageMask,
-        inDependencyFlags,
-        nullptr,
-        nullptr,
-        theImageMemoryBarrier
-    );
-
-    inImage.SetImageLayout( inNewLayout );
-}

@@ -5,6 +5,7 @@
 
 #include "vkt/Device.h"
 #include "vkt/ForwardDecl.h"
+#include "vkt/Image.h"
 
 namespace example
 {
@@ -22,7 +23,14 @@ namespace example
         private:
             burst::PresentContext const & mContext;
 
-            vkt::DescriptorSetLayoutsPtr mDescriptorSetLayout;
+            vkt::ImagePtr mImage;
+            vk::Sampler mSampler;
+            vk::ImageView mImageView;
+
+            vkt::DescriptorSetLayoutsPtr mComputeDescriptorSetLayout;
+            vkt::ComputePipelinePtr mComputePipeline;
+
+            vkt::DescriptorSetLayoutsPtr mGraphicsDescriptorSetLayout;
             vkt::GraphicsPipelinePtr mPipeline;
     };
 }

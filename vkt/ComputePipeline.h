@@ -22,6 +22,7 @@ namespace vkt
             ComputePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo );
             ~ComputePipeline();
 
+            vk::PipelineLayout GetVkPipelineLayout();
             void Bind( vk::CommandBuffer inCommandBuffer );
 
         private:

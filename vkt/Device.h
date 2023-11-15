@@ -26,14 +26,11 @@ namespace vkt
         public:
             vk::Device GetVkDevice() const;
             vk::Queue GetQueue() const;
+            vma::Allocator GetVmaAllocator() const;
             vk::CommandPool GetVkCommandPool() const;
             vkt::PhysicalDevice GetPhysicalDevice() const;
             vk::CommandBuffer BeginSingleTimeCommands() const;
             void EndSingleTimeCommands( vk::CommandBuffer & inCommandBuffer ) const;
-
-            std::vector< vkt::Image > GetSwapchainImages( vk::SwapchainKHR & inSwapchain ) const;
-
-            void ImageMemoryBarrier( vk::CommandBuffer inCommandBuffer, Image inImage, vk::ImageLayout inNewLayout, vk::AccessFlags inSrcAccessMask, vk::AccessFlags inDstAccessMask, vk::PipelineStageFlags inSrcStageMask, vk::PipelineStageFlags inDstStageMask, vk::DependencyFlags inDependencyFlags ) const;
 
         private:
             vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice ) const;

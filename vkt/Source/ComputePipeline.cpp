@@ -10,7 +10,7 @@ vkt::ComputePipeline::ComputePipeline( vkt::Device const & inDevice, PipelineCre
     auto thePipelineShaderStageCreateInfo = vk::PipelineShaderStageCreateInfo
     (
         vk::PipelineShaderStageCreateFlags(),
-        vk::ShaderStageFlagBits::eFragment,
+        vk::ShaderStageFlagBits::eCompute,
         inCreateInfo.computeShaderModule,
         "main"
     );
@@ -39,10 +39,10 @@ vkt::ComputePipeline::ComputePipeline( vkt::Device const & inDevice, PipelineCre
 
     mPipeline = static_cast< vk::UniqueHandle< vk::Pipeline, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE > >(
     mDevice.GetVkDevice().createComputePipelineUnique
-        (
-            vk::PipelineCache(),
-            thePipelineCreateInfo
-        ).value
+    (
+        vk::PipelineCache(),
+        thePipelineCreateInfo
+    ).value
     ).release();
 }
 
@@ -56,6 +56,12 @@ void
 vkt::ComputePipeline::Bind( vk::CommandBuffer inCommandBuffer )
 {
     inCommandBuffer.bindPipeline( vk::PipelineBindPoint::eCompute, mPipeline );
+}
+
+vk::PipelineLayout
+vkt::ComputePipeline::GetVkPipelineLayout()
+{
+    return mPipelineLayout;
 }
 
 // ============================================ GraphicPipelineBuilder ===============================================

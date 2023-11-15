@@ -26,6 +26,7 @@ namespace vkt
             ~GraphicsPipeline();
 
             void Bind( vk::CommandBuffer inCommandBuffer );
+            vk::PipelineLayout GetVkPipelineLayout() const;
 
             friend class GraphicsPipelineBuilder;
 

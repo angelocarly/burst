@@ -185,6 +185,12 @@ vkt::GraphicsPipeline::Bind( vk::CommandBuffer inCommandBuffer )
     inCommandBuffer.bindPipeline( vk::PipelineBindPoint::eGraphics, mPipeline );
 }
 
+vk::PipelineLayout
+vkt::GraphicsPipeline::GetVkPipelineLayout() const
+{
+    return mPipelineLayout;
+}
+
 // ============================================ GraphicPipelineBuilder ===============================================
 
 vkt::GraphicsPipelineBuilder::GraphicsPipelineBuilder( const vkt::Device & inDevice )

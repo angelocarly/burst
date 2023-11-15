@@ -106,17 +106,20 @@ vkt::Swapchain::CreateSwapchain( const vkt::Device & inDevice, const vk::Surface
 void
 vkt::Swapchain::InitializeSwapchainImages()
 {
-    mSwapchainImages = mDevice.GetSwapchainImages( mSwapchain );
+    auto swapchainImages = mDevice.GetVkDevice().getSwapchainImagesKHR( mSwapchain );
+    for( auto swapchainImage : swapchainImages )
+    {
+        mSwapchainImages.emplace_back( std::make_shared< vkt::Image >( mDevice, swapchainImage ) );
+    }
 
     // Transition the images to presentable layout
     auto commandBuffer = mDevice.BeginSingleTimeCommands();
     {
         for( auto & image : mSwapchainImages )
         {
-            mDevice.ImageMemoryBarrier
+            image->MemoryBarrier
             (
                 commandBuffer,
-                image,
                 vk::ImageLayout::ePresentSrcKHR,
                 vk::AccessFlagBits::eNone,
                 vk::AccessFlagBits::eColorAttachmentWrite,
@@ -135,7 +138,7 @@ vkt::Swapchain::InitializeSwapchainImages()
         auto imageViewCreateInfo = vk::ImageViewCreateInfo
         (
             vk::ImageViewCreateFlags(),
-            mSwapchainImages[ i ].GetVkImage(),
+            mSwapchainImages[ i ]->GetVkImage(),
             vk::ImageViewType::e2D,
             GetImageFormat(),
             vk::ComponentMapping
