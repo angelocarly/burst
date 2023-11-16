@@ -7,6 +7,8 @@
 #include "vkt/ForwardDecl.h"
 #include "vkt/Image.h"
 
+#include <chrono>
+
 namespace example
 {
     class TestPresenter

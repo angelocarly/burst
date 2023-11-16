@@ -54,7 +54,7 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
 
     add_custom_target(
         Shaders
-            DEPENDS ${SPIRV_BINARY_FILES}
+            DEPENDS ${OUTPUT_DIRECTORY} ${SPIRV_BINARY_FILES}
     )
 
     add_dependencies( ${PROJECT} Shaders )
