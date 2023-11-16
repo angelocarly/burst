@@ -9,6 +9,7 @@ set(
         GraphicsPipeline.h
         Image.h
         Instance.h
+        Pipeline.h
         PhysicalDevice.h
         RenderPass.h
         Shader.h
@@ -24,6 +25,7 @@ set(
         Source/GraphicsPipeline.cpp
         Source/Image.cpp
         Source/Instance.cpp
+        Source/Pipeline.cpp
         Source/PhysicalDevice.cpp
         Source/RenderPass.cpp
         Source/Shader.cpp

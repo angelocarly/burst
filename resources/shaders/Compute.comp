@@ -6,6 +6,11 @@ layout ( local_size_x = WORKGROUP_SIZE, local_size_y = WORKGROUP_SIZE, local_siz
 #define WIDTH 800
 #define HEIGTH 600
 
+layout(push_constant) uniform PushConstantsBlock
+{
+    float mTime;
+} PushConstants;
+
 layout ( binding = 0, r32ui ) uniform uimage2D outImage;
 
 #define hash(p)  fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453)
@@ -28,24 +33,84 @@ int blueValue( int x )
     return x * 256 * 256;
 }
 
-void drawRay( vec2 origin, vec2 direction, int length )
+// Rotation matrix around the X axis.
+mat3 rotateX(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+    vec3(1, 0, 0),
+    vec3(0, c, -s),
+    vec3(0, s, c)
+    );
+}
+
+// Rotation matrix around the Y axis.
+mat3 rotateY(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+    vec3(c, 0, s),
+    vec3(0, 1, 0),
+    vec3(-s, 0, c)
+    );
+}
+
+// Rotation matrix around the Z axis.
+mat3 rotateZ(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+    vec3(c, -s, 0),
+    vec3(s, c, 0),
+    vec3(0, 0, 1)
+    );
+}
+
+// Identity matrix.
+mat3 identity() {
+    return mat3(
+    vec3(1, 0, 0),
+    vec3(0, 1, 0),
+    vec3(0, 0, 1)
+    );
+}
+
+void drawLine( vec2 a, vec2 b )
 {
-    vec2 pos = origin;
+    vec2 pos = a;
+    vec2 direction = normalize( b - a );
+    int length = int( distance( a, b ) );
+
     for( int i = 0; i < length; i++ )
     {
         pos += direction;
-        imageAtomicAdd( outImage, ivec2( pos ), redValue( 100 ) );
+
+        if( pos.x < 0 || pos.x >= WIDTH * 2 || pos.y < 0 || pos.y >= HEIGTH * 2 )
+            continue;
+
+        imageAtomicAdd( outImage, ivec2( pos ), redValue( 400 ) );
     }
 }
 
+
 void main()
 {
-    ivec2 pos = ivec2( hash2( vec2( gl_GlobalInvocationID.xy ) ) * vec2( WIDTH * 2, HEIGTH * 2 ) );
+    vec2 randDir = normalize( vec2( hash2( vec2( gl_GlobalInvocationID.xy ) ) ) * 2.0f - 1.0f );
+    float randLength = hash( gl_GlobalInvocationID.xy );
+    vec3 pos = vec3( randDir * randLength * vec2( WIDTH * 2, HEIGTH * 2 ) - vec2( WIDTH, HEIGTH ), 0 );
 //    ivec2 pos = ivec2( gl_GlobalInvocationID.xy * vec2( WIDTH * 2, HEIGTH * 2 ) + vec2( 500 ) );
 
     vec2 dir = normalize( vec2( 1, -1) );
 //   dir = normalize( vec2( hash2( vec2( gl_GlobalInvocationID.xy ) )  ) );
 
-    drawRay( pos, dir, 100 );
+    vec3 pos2 = pos + vec3( dir * 100, 0 );
+
+    pos = rotateY( PushConstants.mTime / 1000.0f ) * pos;
+    pos2 = rotateZ( PushConstants.mTime / 500.0f ) * pos2;
+
+    pos += vec3( WIDTH, HEIGTH, 0 );
+    pos2 += vec3( WIDTH, HEIGTH, 0 );
+
+    drawLine( ivec2( pos.x, pos.y ), ivec2( pos2.x, pos2.y ) );
 
 }

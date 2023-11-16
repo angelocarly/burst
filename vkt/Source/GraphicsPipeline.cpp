@@ -2,7 +2,12 @@
 
 vkt::GraphicsPipeline::GraphicsPipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo )
 :
-    mDevice( inDevice )
+    vkt::Pipeline( inDevice, vk::PipelineBindPoint::eGraphics, CreatePipeline( inDevice, inCreateInfo ) )
+{
+}
+
+std::tuple< vk::Pipeline, vk::PipelineLayout >
+vkt::GraphicsPipeline::CreatePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo )
 {
     std::array< vk::PipelineShaderStageCreateInfo, 2 > thePipelineShaderStageCreateInfos;
     thePipelineShaderStageCreateInfos[ 0 ] = vk::PipelineShaderStageCreateInfo
@@ -137,7 +142,7 @@ vkt::GraphicsPipeline::GraphicsPipeline( vkt::Device const & inDevice, PipelineC
         inCreateInfo.pushConstantRanges.size(),
         inCreateInfo.pushConstantRanges.data()
     );
-    mPipelineLayout = mDevice.GetVkDevice().createPipelineLayout
+    auto pipelineLayout = inDevice.GetVkDevice().createPipelineLayout
     (
         thePipelineLayoutCreateInfo
     );
@@ -157,38 +162,26 @@ vkt::GraphicsPipeline::GraphicsPipeline( vkt::Device const & inDevice, PipelineC
         &theDepthStencilStateCreateInfo,
         &theColorBlendStateCreateInfo,
         &theDynamicStateCreateInfo,
-        mPipelineLayout,
+        pipelineLayout,
         inCreateInfo.renderPass,
         0,
         nullptr,
         -1
     );
 
-    mPipeline = static_cast< vk::UniqueHandle< vk::Pipeline, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE > >(
-        mDevice.GetVkDevice().createGraphicsPipelineUnique
+    auto pipeline = static_cast< vk::UniqueHandle< vk::Pipeline, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE > >(
+        inDevice.GetVkDevice().createGraphicsPipelineUnique
         (
             vk::PipelineCache(),
             thePipelineCreateInfo
         ).value
     ).release();
+
+    return { pipeline, pipelineLayout };
 }
 
 vkt::GraphicsPipeline::~GraphicsPipeline()
 {
-    mDevice.GetVkDevice().destroy( mPipelineLayout );
-    mDevice.GetVkDevice().destroyPipeline( mPipeline );
-}
-
-void
-vkt::GraphicsPipeline::Bind( vk::CommandBuffer inCommandBuffer )
-{
-    inCommandBuffer.bindPipeline( vk::PipelineBindPoint::eGraphics, mPipeline );
-}
-
-vk::PipelineLayout
-vkt::GraphicsPipeline::GetVkPipelineLayout() const
-{
-    return mPipelineLayout;
 }
 
 // ============================================ GraphicPipelineBuilder ===============================================

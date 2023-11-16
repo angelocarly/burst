@@ -96,9 +96,20 @@ example::TestPresenter::TestPresenter( burst::PresentContext const & inContext )
     // Compute shader
     auto computeShader = vkt::Shader::CreateVkShaderModule( mContext.mDevice, "resources/shaders/Compute.comp" );
 
+    std::vector< vk::PushConstantRange > pushConstants =
+    {
+        vk::PushConstantRange
+        (
+            vk::ShaderStageFlagBits::eCompute,
+            0,
+            sizeof( PushConstants )
+        )
+    };
+
     mComputePipeline = vkt::ComputePipelineBuilder( mContext.mDevice )
         .SetComputeShader( computeShader )
         .SetDescriptorSetLayouts( mComputeDescriptorSetLayout )
+        .SetPushConstants( pushConstants )
         .Build();
 
     mContext.mDevice.GetVkDevice().destroy( computeShader );
@@ -131,6 +142,7 @@ example::TestPresenter::~TestPresenter()
 void
 example::TestPresenter::Compute( vk::CommandBuffer inCommandBuffer ) const
 {
+    // Reset image
     inCommandBuffer.clearColorImage
     (
         mImage->GetVkImage(),
@@ -146,6 +158,7 @@ example::TestPresenter::Compute( vk::CommandBuffer inCommandBuffer ) const
         )
     );
 
+    // Begin pipeline
     mComputePipeline->Bind( inCommandBuffer );
 
     // Push descriptor set
@@ -163,18 +176,27 @@ example::TestPresenter::Compute( vk::CommandBuffer inCommandBuffer ) const
     theWriteDescriptorSet.setDescriptorCount( 1 );
     theWriteDescriptorSet.setPImageInfo( & imageInfo );
 
-    PFN_vkCmdPushDescriptorSetKHR pfnVkCmdPushDescriptorSetKhr = reinterpret_cast< PFN_vkCmdPushDescriptorSetKHR >( mContext.mDevice.GetVkDevice().getProcAddr( "vkCmdPushDescriptorSetKHR" ) );
-    pfnVkCmdPushDescriptorSetKhr
+    mComputePipeline->BindPushDescriptorSet( inCommandBuffer, theWriteDescriptorSet );
+
+    // Push constants
+    auto time = std::chrono::duration_cast<std::chrono::microseconds>
     (
-        inCommandBuffer,
-        VkPipelineBindPoint::VK_PIPELINE_BIND_POINT_COMPUTE,
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    PushConstants thePushConstants
+    {
+        ( float ) ( mStartTime - time ).count() / 1000.0f
+    };
+    inCommandBuffer.pushConstants
+    (
         mComputePipeline->GetVkPipelineLayout(),
+        vk::ShaderStageFlagBits::eCompute,
         0,
-        1,
-        reinterpret_cast< const VkWriteDescriptorSet * >(& theWriteDescriptorSet)
+        sizeof( PushConstants ),
+        & thePushConstants
     );
 
-    inCommandBuffer.dispatch( 1, 1, 1 );
+    inCommandBuffer.dispatch( 100, 1, 1 );
 }
 
 void
@@ -198,16 +220,7 @@ example::TestPresenter::Present( vk::CommandBuffer inCommandBuffer ) const
     theWriteDescriptorSet.setDescriptorCount( 1 );
     theWriteDescriptorSet.setPImageInfo( & imageInfo );
 
-    PFN_vkCmdPushDescriptorSetKHR pfnVkCmdPushDescriptorSetKhr = reinterpret_cast< PFN_vkCmdPushDescriptorSetKHR >( mContext.mDevice.GetVkDevice().getProcAddr( "vkCmdPushDescriptorSetKHR" ) );
-    pfnVkCmdPushDescriptorSetKhr
-    (
-        inCommandBuffer,
-        VkPipelineBindPoint::VK_PIPELINE_BIND_POINT_GRAPHICS,
-        mPipeline->GetVkPipelineLayout(),
-        0,
-        1,
-        reinterpret_cast< const VkWriteDescriptorSet * >(& theWriteDescriptorSet)
-    );
+    mPipeline->BindPushDescriptorSet( inCommandBuffer, theWriteDescriptorSet );
 
     inCommandBuffer.draw( 3, 1, 0, 0 );
 }

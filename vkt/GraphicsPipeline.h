@@ -3,10 +3,13 @@
 
 #include "vkt/Device.h"
 #include "vkt/DescriptorSetLayout.h"
+#include "vkt/Pipeline.h"
 
 namespace vkt
 {
     class GraphicsPipeline
+    :
+        public vkt::Pipeline
     {
         private:
             struct PipelineCreateInfo
@@ -25,15 +28,10 @@ namespace vkt
             GraphicsPipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo );
             ~GraphicsPipeline();
 
-            void Bind( vk::CommandBuffer inCommandBuffer );
-            vk::PipelineLayout GetVkPipelineLayout() const;
-
             friend class GraphicsPipelineBuilder;
 
         private:
-            vkt::Device const & mDevice;
-            vk::PipelineLayout mPipelineLayout;
-            vk::Pipeline mPipeline;
+            std::tuple< vk::Pipeline, vk::PipelineLayout > CreatePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo );
     };
 
     class GraphicsPipelineBuilder

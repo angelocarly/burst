@@ -32,6 +32,16 @@ namespace example
 
             vkt::DescriptorSetLayoutsPtr mGraphicsDescriptorSetLayout;
             vkt::GraphicsPipelinePtr mPipeline;
+
+            std::chrono::microseconds mStartTime = std::chrono::duration_cast<std::chrono::microseconds>
+            (
+                std::chrono::system_clock::now().time_since_epoch()
+            );
+
+            struct PushConstants
+            {
+                float mTime;
+            };
     };
 }
 

@@ -5,7 +5,13 @@
 
 vkt::ComputePipeline::ComputePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo )
 :
+    vkt::Pipeline( inDevice, vk::PipelineBindPoint::eCompute, CreatePipeline( inDevice, inCreateInfo ) ),
     mDevice( inDevice )
+{
+}
+
+std::tuple< vk::Pipeline, vk::PipelineLayout >
+vkt::ComputePipeline::CreatePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo )
 {
     auto thePipelineShaderStageCreateInfo = vk::PipelineShaderStageCreateInfo
     (
@@ -24,7 +30,7 @@ vkt::ComputePipeline::ComputePipeline( vkt::Device const & inDevice, PipelineCre
         inCreateInfo.pushConstantRanges.size(),
         inCreateInfo.pushConstantRanges.data()
     );
-    mPipelineLayout = mDevice.GetVkDevice().createPipelineLayout
+    auto pipelineLayout = inDevice.GetVkDevice().createPipelineLayout
     (
         thePipelineLayoutCreateInfo
     );
@@ -34,34 +40,22 @@ vkt::ComputePipeline::ComputePipeline( vkt::Device const & inDevice, PipelineCre
     (
         vk::PipelineCreateFlags(),
         thePipelineShaderStageCreateInfo,
-        mPipelineLayout
+        pipelineLayout
     );
 
-    mPipeline = static_cast< vk::UniqueHandle< vk::Pipeline, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE > >(
-    mDevice.GetVkDevice().createComputePipelineUnique
+    auto pipeline = static_cast< vk::UniqueHandle< vk::Pipeline, VULKAN_HPP_DEFAULT_DISPATCHER_TYPE > >(
+    inDevice.GetVkDevice().createComputePipelineUnique
     (
         vk::PipelineCache(),
         thePipelineCreateInfo
     ).value
     ).release();
+
+    return { pipeline, pipelineLayout };
 }
 
 vkt::ComputePipeline::~ComputePipeline()
 {
-    mDevice.GetVkDevice().destroy( mPipelineLayout );
-    mDevice.GetVkDevice().destroyPipeline( mPipeline );
-}
-
-void
-vkt::ComputePipeline::Bind( vk::CommandBuffer inCommandBuffer )
-{
-    inCommandBuffer.bindPipeline( vk::PipelineBindPoint::eCompute, mPipeline );
-}
-
-vk::PipelineLayout
-vkt::ComputePipeline::GetVkPipelineLayout()
-{
-    return mPipelineLayout;
 }
 
 // ============================================ GraphicPipelineBuilder ===============================================
@@ -85,6 +79,13 @@ vkt::ComputePipelineBuilder &
 vkt::ComputePipelineBuilder::SetDescriptorSetLayouts( vkt::DescriptorSetLayoutsPtr & inDescriptorSetLayouts )
 {
     mPipelineCreateInfo.descriptorSetLayouts = inDescriptorSetLayouts;
+    return *this;
+}
+
+vkt::ComputePipelineBuilder &
+vkt::ComputePipelineBuilder::SetPushConstants( std::vector< vk::PushConstantRange > inPushConstants )
+{
+    mPipelineCreateInfo.pushConstantRanges = std::move( inPushConstants );
     return *this;
 }
 

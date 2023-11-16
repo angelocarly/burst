@@ -1,14 +1,17 @@
 #ifndef Vkt_ComputePipeline_h
 #define Vkt_ComputePipeline_h
 
-#include "Device.h"
-#include "ForwardDecl.h"
+#include "vkt/Device.h"
+#include "vkt/ForwardDecl.h"
+#include "vkt/Pipeline.h"
 
 #include <vulkan/vulkan.hpp>
 
 namespace vkt
 {
     class ComputePipeline
+    :
+        public vkt::Pipeline
     {
         public:
             struct PipelineCreateInfo
@@ -22,14 +25,12 @@ namespace vkt
             ComputePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo );
             ~ComputePipeline();
 
-            vk::PipelineLayout GetVkPipelineLayout();
-            void Bind( vk::CommandBuffer inCommandBuffer );
+        private:
+            std::tuple< vk::Pipeline, vk::PipelineLayout >
+            CreatePipeline( vkt::Device const & inDevice, PipelineCreateInfo const & inCreateInfo );
 
         private:
             vkt::Device const & mDevice;
-
-            vk::Pipeline mPipeline;
-            vk::PipelineLayout mPipelineLayout;
     };
 
     class ComputePipelineBuilder
@@ -40,6 +41,7 @@ namespace vkt
 
             ComputePipelineBuilder & SetComputeShader( vk::ShaderModule inVertexShaderModule );
             vkt::ComputePipelineBuilder & SetDescriptorSetLayouts( vkt::DescriptorSetLayoutsPtr & inDescriptorSetLayouts );
+            vkt::ComputePipelineBuilder & SetPushConstants( std::vector< vk::PushConstantRange > inPushConstants );
             vkt::ComputePipelinePtr Build();
 
         private:
