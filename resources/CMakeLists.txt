@@ -35,14 +35,14 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
 
     # Burst shaders
     set(
-            GLSL_BURST_SOURCE_FILES
+        GLSL_BURST_SOURCE_FILES
             shaders/ScreenRect.vert
     )
-    set( INPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/resources" )
+    set( INPUT_DIRECTORY "${BURST_RESOURCES_DIR}" )
     foreach( GLSL ${GLSL_BURST_SOURCE_FILES} )
         get_filename_component( FILE_NAME ${GLSL} NAME )
         set(
-                SPIRV
+            SPIRV
                 "${OUTPUT_DIRECTORY}/${FILE_NAME}.spv"
         )
         add_custom_command(

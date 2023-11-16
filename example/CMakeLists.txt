@@ -29,7 +29,7 @@ target_link_libraries(
         Burst
 )
 
-include_directories( ${PROJECT_ROOT_DIR} )
+include_directories( ${BURST_ROOT_DIR} )
 
 
 compile_shaders( Example "${CMAKE_CURRENT_SOURCE_DIR}/resources/" "${CMAKE_CURRENT_BINARY_DIR}/resources/shaders/" "${GLSL_SOURCE_FILES}" )

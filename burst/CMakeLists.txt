@@ -24,7 +24,7 @@ add_library(
 )
 
 set_property( TARGET Burst PROPERTY CXX_STANDARD 17 )
-include_directories( ${PROJECT_ROOT_DIR} )
+include_directories( ${BURST_ROOT_DIR} )
 
 # Project libraries
 target_link_libraries(

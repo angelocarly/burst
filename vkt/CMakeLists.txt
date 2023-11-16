@@ -39,7 +39,7 @@ add_library(
 )
 
 set_property( TARGET Vkt PROPERTY CXX_STANDARD 17 )
-include_directories( ${PROJECT_ROOT_DIR} )
+include_directories( ${BURST_ROOT_DIR} )
 
 ### Libraries
 
