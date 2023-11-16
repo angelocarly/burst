@@ -3,6 +3,8 @@
 
 function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_FILES )
 
+    set( SHADERTARGET "${PROJECT}_Shaders" )
+
     if(LINUX)
         set( GLSL_VALIDATOR "/usr/bin/glslangValidator" )
     else()
@@ -10,8 +12,8 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
     endif()
 
     add_custom_command(
-        OUTPUT ${OUTPUT_DIRECTORY}
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIRECTORY}
+            OUTPUT ${OUTPUT_DIRECTORY}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIRECTORY}
     )
 
     # Project shaders
@@ -19,7 +21,7 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
 
         get_filename_component( FILE_NAME ${GLSL} NAME )
         set(
-            SPIRV
+                SPIRV
                 "${OUTPUT_DIRECTORY}/${FILE_NAME}.spv"
         )
         add_custom_command(
@@ -33,14 +35,14 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
 
     # Burst shaders
     set(
-        GLSL_BURST_SOURCE_FILES
+            GLSL_BURST_SOURCE_FILES
             shaders/ScreenRect.vert
     )
     set( INPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/resources" )
     foreach( GLSL ${GLSL_BURST_SOURCE_FILES} )
         get_filename_component( FILE_NAME ${GLSL} NAME )
         set(
-            SPIRV
+                SPIRV
                 "${OUTPUT_DIRECTORY}/${FILE_NAME}.spv"
         )
         add_custom_command(
@@ -53,9 +55,9 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
     endforeach( GLSL )
 
     add_custom_target(
-        Shaders
+            ${SHADERTARGET}
             DEPENDS ${OUTPUT_DIRECTORY} ${SPIRV_BINARY_FILES}
     )
 
-    add_dependencies( ${PROJECT} Shaders )
+    add_dependencies( ${PROJECT} ${SHADERTARGET} )
 endfunction()
