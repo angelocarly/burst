@@ -9,6 +9,11 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
         set( GLSL_VALIDATOR "/usr/local/bin/glslangValidator" )
     endif()
 
+    add_custom_command(
+        OUTPUT ${OUTPUT_DIRECTORY}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIRECTORY}
+    )
+
     # Project shaders
     foreach( GLSL ${GLSL_SOURCE_FILES} )
 

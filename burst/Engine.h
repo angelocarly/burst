@@ -9,6 +9,8 @@
 #include "vkt/Instance.h"
 #include "vkt/PhysicalDevice.h"
 
+#include <chrono>
+
 namespace burst
 {
     class Engine

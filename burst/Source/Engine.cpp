@@ -12,6 +12,8 @@
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_beta.h>
 
+#include <chrono>
+
 namespace
 {
     std::vector< const char * >
