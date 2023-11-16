@@ -107,7 +107,7 @@ burst::Engine::Run()
             previousSecond = frameTime;
             auto fps = frameCount;
             frameCount = 0;
-            spdlog::info( "FPS: {}", fps );
+            spdlog::get("burst")->info( "FPS: {}", fps );
         }
     }
 }

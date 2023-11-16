@@ -9,6 +9,12 @@ set(
         main.cpp
 )
 
+set(
+    GLSL_SOURCE_FILES
+        shaders/Sampler.frag
+        shaders/Compute.comp
+)
+
 add_executable(
     Example
         ${SOURCE_FILES}
@@ -25,4 +31,5 @@ target_link_libraries(
 
 include_directories( ${PROJECT_ROOT_DIR} )
 
-install_burst_resources( Example )
+
+compile_shaders( Example "${CMAKE_CURRENT_SOURCE_DIR}/resources/" "${CMAKE_CURRENT_BINARY_DIR}/resources/shaders/" "${GLSL_SOURCE_FILES}" )
