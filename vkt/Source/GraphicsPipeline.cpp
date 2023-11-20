@@ -240,3 +240,17 @@ vkt::GraphicsPipelineBuilder::Build()
 {
     return std::make_shared< vkt::GraphicsPipeline >( mDevice, mPipelineCreateInfo );
 }
+
+vkt::GraphicsPipelineBuilder &
+vkt::GraphicsPipelineBuilder::SetVertexInputBindingDescriptions( std::vector< vk::VertexInputBindingDescription > inVertexInputBindingDescriptions )
+{
+    mPipelineCreateInfo.vertexInputBindingDescriptions = inVertexInputBindingDescriptions;
+    return *this;
+}
+
+vkt::GraphicsPipelineBuilder &
+vkt::GraphicsPipelineBuilder::SetVertexInputAttributeDescriptions( std::vector< vk::VertexInputAttributeDescription > inVertexInputAttributeDescriptions )
+{
+    mPipelineCreateInfo.vertexInputAttributeDescriptions = inVertexInputAttributeDescriptions;
+    return *this;
+}

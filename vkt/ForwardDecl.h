@@ -5,6 +5,9 @@
 
 namespace vkt
 {
+    class Buffer;
+    using BufferPtr = std::shared_ptr< Buffer >;
+
     class ComputePipeline;
     using ComputePipelinePtr = std::shared_ptr< ComputePipeline >;
 
@@ -21,6 +24,9 @@ namespace vkt
 
     class GraphicsPipeline;
     using GraphicsPipelinePtr = std::shared_ptr< GraphicsPipeline >;
+
+    class Mesh;
+    using MeshPtr = std::shared_ptr< Mesh >;
 
     class RenderPass;
     using RenderPassPtr = std::shared_ptr< RenderPass >;

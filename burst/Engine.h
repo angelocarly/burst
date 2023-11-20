@@ -35,6 +35,8 @@ namespace burst
             vkt::Device mDevice;
             burst::Display mDisplay;
 
+            std::chrono::microseconds mPreviousFrameTime;
+            std::chrono::microseconds mPreviousSecond;
     };
 }
 

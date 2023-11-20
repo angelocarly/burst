@@ -1,4 +1,4 @@
-#include "example/TestPresenter.h"
+#include "example/compute/TestPresenter.h"
 
 #include "vkt/Device.h"
 #include "vkt/ForwardDecl.h"
@@ -132,9 +132,6 @@ example::TestPresenter::TestPresenter( burst::PresentContext const & inContext )
 
 example::TestPresenter::~TestPresenter()
 {
-    mContext.mDevice.GetVkDevice().waitIdle();
-
-    // TODO: Destroy image handles automatically
     mContext.mDevice.GetVkDevice().destroy( mImageView );
     mContext.mDevice.GetVkDevice().destroy( mSampler );
 }

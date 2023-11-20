@@ -1,6 +1,6 @@
 set(
     HEADER_FILES
-        Vma.h
+        Buffer.h
         ComputePipeline.h
         Device.h
         DescriptorSetLayout.h
@@ -9,15 +9,18 @@ set(
         GraphicsPipeline.h
         Image.h
         Instance.h
+        Mesh.h
         Pipeline.h
         PhysicalDevice.h
         RenderPass.h
         Shader.h
         Swapchain.h
+        Vma.h
 )
 
 set(
     SOURCE_FILES
+        Source/Buffer.cpp
         Source/ComputePipeline.cpp
         Source/Device.cpp
         Source/DescriptorSetLayout.cpp
@@ -25,6 +28,7 @@ set(
         Source/GraphicsPipeline.cpp
         Source/Image.cpp
         Source/Instance.cpp
+        Source/Mesh.cpp
         Source/Pipeline.cpp
         Source/PhysicalDevice.cpp
         Source/RenderPass.cpp

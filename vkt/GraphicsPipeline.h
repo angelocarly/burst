@@ -44,6 +44,8 @@ namespace vkt
             GraphicsPipelineBuilder & SetVertexShader( vk::ShaderModule inVertexShaderModule );
             GraphicsPipelineBuilder & SetFragmentShader( vk::ShaderModule inFragmentShaderModule );
             GraphicsPipelineBuilder & SetDescriptorSetLayouts( vkt::DescriptorSetLayoutsPtr & inDescriptorSetLayouts );
+            GraphicsPipelineBuilder & SetVertexInputBindingDescriptions( std::vector< vk::VertexInputBindingDescription > inVertexInputBindingDescriptions );
+            GraphicsPipelineBuilder & SetVertexInputAttributeDescriptions( std::vector< vk::VertexInputAttributeDescription > inVertexInputAttributeDescriptions );
 
             GraphicsPipelinePtr Build();
 

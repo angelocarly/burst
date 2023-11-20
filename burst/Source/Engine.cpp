@@ -65,6 +65,12 @@ burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * i
     spdlog::stdout_color_mt("burst");
 
     spdlog::get( "burst" )->info( "Started engine" );
+
+    mPreviousFrameTime = std::chrono::duration_cast<std::chrono::microseconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    mPreviousSecond = mPreviousFrameTime;
 }
 
 burst::Engine::~Engine()
@@ -72,30 +78,26 @@ burst::Engine::~Engine()
     spdlog::get( "burst" )->info( "Stopped engine" );
 }
 
+
 void
 burst::Engine::Run()
 {
-    auto previousSecond = std::chrono::duration_cast<std::chrono::microseconds>
-    (
-        std::chrono::system_clock::now().time_since_epoch()
-    );
     std::chrono::microseconds frameTime = std::chrono::duration_cast<std::chrono::microseconds>
     (
         std::chrono::system_clock::now().time_since_epoch()
     );
-    std::chrono::microseconds previousFrameTime = frameTime;
     std::size_t frameCount;
 
     while( !mWindow.ShouldClose() )
     {
         frameCount++;
 
-        previousFrameTime = frameTime;
+        mPreviousFrameTime = frameTime;
         frameTime = std::chrono::duration_cast<std::chrono::microseconds>
         (
             std::chrono::system_clock::now().time_since_epoch()
         );
-        float theFrameDuration = ( frameTime.count() - previousFrameTime.count() ) % 10000000000 / 1000000.0f;
+        float theFrameDuration = ( frameTime.count() - mPreviousFrameTime.count() ) % 10000000000 / 1000000.0f;
 
         mWindow.Poll();
 
@@ -103,10 +105,10 @@ burst::Engine::Run()
 
         mDisplay.Render( GetPresenter() );
 
-        float theSecondDuration = ( frameTime.count() - previousSecond.count() ) % 10000000000 / 1000000.0f;
+        float theSecondDuration = ( frameTime.count() - mPreviousSecond.count() ) % 10000000000 / 1000000.0f;
         if( theSecondDuration > 1 )
         {
-            previousSecond = frameTime;
+            mPreviousSecond = frameTime;
             auto fps = frameCount;
             frameCount = 0;
             spdlog::get("burst")->info( "FPS: {}", fps );
