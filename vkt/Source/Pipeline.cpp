@@ -53,8 +53,15 @@ vkt::Pipeline::BindPushDescriptorSet( vk::CommandBuffer inCommandBuffer, vk::Wri
     );
 }
 
+void
+vkt::Pipeline::PushConstants( vk::CommandBuffer inCommandBuffer, vk::ShaderStageFlags inShaderStageFlags, std::uint32_t inOffset, std::uint32_t inSize, const void * inData )
+{
+    inCommandBuffer.pushConstants( mPipelineLayout, inShaderStageFlags, inOffset, inSize, inData );
+}
+
 vk::PipelineLayout
 vkt::Pipeline::GetVkPipelineLayout() const
 {
     return mPipelineLayout;
 }
+
