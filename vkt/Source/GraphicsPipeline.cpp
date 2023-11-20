@@ -254,3 +254,11 @@ vkt::GraphicsPipelineBuilder::SetVertexInputAttributeDescriptions( std::vector< 
     mPipelineCreateInfo.vertexInputAttributeDescriptions = inVertexInputAttributeDescriptions;
     return *this;
 }
+
+vkt::GraphicsPipelineBuilder &
+vkt::GraphicsPipelineBuilder::SetPushConstants( std::vector< vk::PushConstantRange > inPushConstants )
+{
+    mPipelineCreateInfo.pushConstantRanges = std::move( inPushConstants );
+    return *this;
+}
+

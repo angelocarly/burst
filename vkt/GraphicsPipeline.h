@@ -46,6 +46,7 @@ namespace vkt
             GraphicsPipelineBuilder & SetDescriptorSetLayouts( vkt::DescriptorSetLayoutsPtr & inDescriptorSetLayouts );
             GraphicsPipelineBuilder & SetVertexInputBindingDescriptions( std::vector< vk::VertexInputBindingDescription > inVertexInputBindingDescriptions );
             GraphicsPipelineBuilder & SetVertexInputAttributeDescriptions( std::vector< vk::VertexInputAttributeDescription > inVertexInputAttributeDescriptions );
+            GraphicsPipelineBuilder & SetPushConstants( std::vector< vk::PushConstantRange > inPushConstants );
 
             GraphicsPipelinePtr Build();
 

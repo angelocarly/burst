@@ -16,6 +16,11 @@ class ExampleEngine
         {
         }
 
+        ~ExampleEngine()
+        {
+            GetPresentContext().mDevice.GetVkDevice().waitIdle();
+        }
+
         virtual void Update() const override
         {
         }
