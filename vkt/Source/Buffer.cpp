@@ -8,10 +8,11 @@ vkt::Buffer::Buffer( vkt::Device const & inDevice )
 {
 }
 
-vkt::Buffer::Buffer( vkt::Device const & inDevice, vk::Buffer inBuffer, vma::Allocation inAllocation )
+vkt::Buffer::Buffer( vkt::Device const & inDevice, vk::Buffer inBuffer, vk::DeviceSize inSize, vma::Allocation inAllocation )
 :
     mDevice( inDevice ),
     mBuffer( inBuffer ),
+    mSize( inSize ),
     mAllocation( inAllocation )
 {
 }
@@ -42,6 +43,12 @@ void
 vkt::Buffer::UnMapMemory()
 {
     mDevice.GetVmaAllocator().unmapMemory( mAllocation );
+}
+
+vk::DeviceSize
+vkt::Buffer::GetSize()
+{
+    return mSize;
 }
 
 // =====================================================================================================================
@@ -77,7 +84,7 @@ vkt::BufferFactory::CreateBuffer( vk::DeviceSize inSize, vk::BufferUsageFlags in
         bufferCreateInfo,
         allocationCreateInfo
     );
-    return std::make_shared< vkt::Buffer >( mDevice, result.first, result.second );
+    return std::make_shared< vkt::Buffer >( mDevice, result.first, inSize, result.second );
 }
 
 

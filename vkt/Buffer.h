@@ -12,7 +12,7 @@ namespace vkt
     {
         public:
             Buffer( vkt::Device const & inDevice );
-            Buffer( vkt::Device const & inDevice, vk::Buffer inBuffer, vma::Allocation inAllocation = nullptr );
+            Buffer( vkt::Device const & inDevice, vk::Buffer inBuffer, vk::DeviceSize inSize, vma::Allocation inAllocation = nullptr );
             ~Buffer();
 
             vk::Buffer GetVkBuffer() const;
@@ -30,11 +30,14 @@ namespace vkt
             void * MapMemory();
             void UnMapMemory();
 
+            vk::DeviceSize GetSize();
+
         private:
             vkt::Device const & mDevice;
 
             vk::Buffer mBuffer;
             vma::Allocation mAllocation;
+            vk::DeviceSize mSize;
     };
 
     class BufferFactory
