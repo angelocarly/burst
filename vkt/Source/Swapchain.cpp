@@ -120,7 +120,7 @@ vkt::Swapchain::InitializeSwapchainImages()
             image->MemoryBarrier
             (
                 commandBuffer,
-                vk::ImageLayout::ePresentSrcKHR,
+                vk::ImageLayout::eColorAttachmentOptimal,
                 vk::AccessFlagBits::eNone,
                 vk::AccessFlagBits::eColorAttachmentWrite,
                 vk::PipelineStageFlagBits::eTopOfPipe,
@@ -264,7 +264,7 @@ vkt::Swapchain::PresentImage( uint32_t inImageIndex, vk::Semaphore const & inWai
     );
 
     auto result = mDevice.GetQueue().presentKHR( thePresentInfo );
-    if( result != vk::Result::eSuccess )
+    if( result != vk::Result::eSuccess && result != vk::Result::eSuboptimalKHR )
     {
         // TODO: recreate the swapchain
         throw std::runtime_error( "Error presenting swapchain" );

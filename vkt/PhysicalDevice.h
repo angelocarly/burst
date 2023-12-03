@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include <optional>
+#include <cstdint>
 
 namespace vkt
 {

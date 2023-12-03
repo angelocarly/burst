@@ -6,7 +6,8 @@
 
 vkt::Image::Image( vkt::Device const & inDevice )
 :
-    mDevice( inDevice )
+    mDevice( inDevice ),
+    mImageLayout( vk::ImageLayout::eUndefined )
 {
 }
 
@@ -14,7 +15,8 @@ vkt::Image::Image( vkt::Device const & inDevice, vk::Image inImage, vma::Allocat
 :
     mDevice( inDevice ),
     mImage( inImage ),
-    mAllocation( inAllocation )
+    mAllocation( inAllocation ),
+    mImageLayout( vk::ImageLayout::eUndefined )
 {
 }
 
