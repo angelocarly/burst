@@ -44,7 +44,7 @@ class ExampleEngine
             GetPresentContext().mDevice.GetVkDevice().waitIdle();
         }
 
-        virtual void Update() const override
+        virtual void Update( float inDelta ) override
         {
         }
 

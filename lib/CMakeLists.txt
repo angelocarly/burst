@@ -1,6 +1,7 @@
 ## IMGUI
 set( IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui )
 add_library( Imgui STATIC )
+set_property( TARGET Imgui PROPERTY CXX_STANDARD 17 )
 set_target_properties( Imgui PROPERTIES POSITION_INDEPENDENT_CODE ON )
 
 target_sources(
@@ -22,3 +23,11 @@ target_include_directories(
         PUBLIC ${IMGUI_DIR}
         PUBLIC ${IMGUI_DIR}/backends
 )
+
+# GLFW
+find_package( glfw3 3.3 REQUIRED )
+target_link_libraries( Imgui PUBLIC glfw )
+
+# Vulkan
+find_package( Vulkan REQUIRED )
+target_link_libraries( Imgui PUBLIC Vulkan::Vulkan )
