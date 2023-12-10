@@ -4,6 +4,8 @@
 
 #include "example/gui/TestPresenter.h"
 
+#include <ImGuiFileDialog.h>
+
 class ExampleEngine
 :
     public burst::Engine
@@ -24,6 +26,26 @@ class ExampleEngine
         virtual void Update( float inDelta ) override
         {
             mPresenter.Update( inDelta );
+
+            ImGui::Begin( "test" );
+            if (ImGui::Button("Open File Dialog"))
+                ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
+
+            // display
+            if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+            {
+                // action if OK
+                if (ImGuiFileDialog::Instance()->IsOk())
+                {
+                    std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+                    std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+                    // action
+                }
+
+                // close
+                ImGuiFileDialog::Instance()->Close();
+            }
+            ImGui::End();
         }
 
         virtual burst::Presenter & GetPresenter() const override

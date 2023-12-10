@@ -8,3 +8,6 @@
 	path = lib/imgui
 	url = git@github.com:ocornut/imgui.git
 	branch = docking
+[submodule "lib/ImGuiFileDialog"]
+	path = lib/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog

@@ -24,10 +24,23 @@ target_include_directories(
         PUBLIC ${IMGUI_DIR}/backends
 )
 
-# GLFW
 find_package( glfw3 3.3 REQUIRED )
 target_link_libraries( Imgui PUBLIC glfw )
 
-# Vulkan
 find_package( Vulkan REQUIRED )
 target_link_libraries( Imgui PUBLIC Vulkan::Vulkan )
+
+# ImGuiFileDialog
+set( IMGUIFILEDIALOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ImGuiFileDialog )
+add_library( ImGuiFileDialog STATIC )
+set_property( TARGET ImGuiFileDialog PROPERTY CXX_STANDARD 17 )
+target_link_libraries( ImGuiFileDialog PUBLIC Imgui )
+target_sources(
+    ImGuiFileDialog
+        PRIVATE
+        ${IMGUIFILEDIALOG_DIR}/ImGuiFileDialog.cpp
+)
+target_include_directories(
+    ImGuiFileDialog
+        PUBLIC ${IMGUIFILEDIALOG_DIR}
+)

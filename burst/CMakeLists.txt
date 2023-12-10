@@ -33,6 +33,7 @@ target_link_libraries(
     Burst PUBLIC
         Vkt
         Imgui
+        ImGuiFileDialog
 )
 
 ### Libraries
