@@ -1,5 +1,6 @@
 set(
     HEADER_FILES
+        AssetLoader.h
         Display.h
         Engine.h
         GuiPresenter.h
@@ -11,6 +12,7 @@ set(
 
 set(
     SOURCE_FILES
+        Source/AssetLoader.cpp
         Source/Display.cpp
         Source/Engine.cpp
         Source/GuiPresenter.cpp
@@ -45,3 +47,7 @@ target_link_libraries( Burst PUBLIC spdlog::spdlog )
 # GLFW
 find_package( glfw3 3.3 REQUIRED )
 target_link_libraries( Burst PUBLIC glfw )
+
+# stb
+set( STB_DIR "${BURST_ROOT_DIR}/lib/stb" )
+include_directories( ${STB_DIR} )

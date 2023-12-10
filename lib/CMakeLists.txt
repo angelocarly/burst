@@ -44,3 +44,6 @@ target_include_directories(
     ImGuiFileDialog
         PUBLIC ${IMGUIFILEDIALOG_DIR}
 )
+
+# stb
+include_directories( ${STB_DIR} )
