@@ -8,12 +8,15 @@
 #include "vkt/Device.h"
 #include "vkt/Instance.h"
 #include "vkt/PhysicalDevice.h"
+#include "GuiPresenter.h"
 
 #include <chrono>
 
 namespace burst
 {
     class Engine
+    :
+        public Presenter
     {
         public:
             Engine( std::size_t inWidth, std::size_t inHeight, const char * inTitle, VulkanConfig inVulkanConfig = VulkanConfig() );
@@ -23,8 +26,12 @@ namespace burst
             void Run();
             burst::PresentContext const & GetPresentContext();
 
-            virtual void Update() const = 0;
+            virtual void Update( float inDelta ) = 0;
             virtual burst::Presenter & GetPresenter() const = 0;
+
+        public:
+            void Compute( vk::CommandBuffer inCommandBuffer ) const;
+            void Present( vk::CommandBuffer inCommandBuffer ) const;
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
@@ -37,6 +44,8 @@ namespace burst
 
             std::chrono::microseconds mPreviousFrameTime;
             std::chrono::microseconds mPreviousSecond;
+
+            burst::GuiPresenter mGui;
     };
 }
 

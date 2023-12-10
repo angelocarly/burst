@@ -106,3 +106,9 @@ burst::Display::GetPresentContext() const
 {
     return mPresentContext;
 }
+
+const vkt::Swapchain &
+burst::Display::GetSwapchain()
+{
+    return mSwapchain;
+}

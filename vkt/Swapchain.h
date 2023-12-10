@@ -15,6 +15,7 @@ namespace vkt
             std::uint32_t RetrieveNextImage() const;
             void SubmitCommandBuffer( std::uint32_t inImageIndex, vk::CommandBuffer inCommandBuffer );
 
+            std::size_t GetMinImageCount() const { return 3; };
             std::size_t GetImageCount() const { return mSwapchainImages.size(); };
             vk::Format GetImageFormat() const { return vk::Format::eB8G8R8A8Srgb; };
             vk::ColorSpaceKHR GetColorSpace() const { return vk::ColorSpaceKHR::eSrgbNonlinear; };

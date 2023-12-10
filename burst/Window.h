@@ -21,7 +21,7 @@ namespace burst
             ~Window();
 
         public:
-            GLFWwindow * GetGLFWWindow();
+            GLFWwindow * GetGLFWWindow() const;
 
             /**
              * @brief Returns true if the window should close. I.e. the user has clicked the close button.

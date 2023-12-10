@@ -24,6 +24,7 @@ namespace vkt
             ~Device();
 
         public:
+            vkt::Instance const & GetInstance() const;
             vk::Device GetVkDevice() const;
             vk::Queue GetQueue() const;
             vma::Allocator GetVmaAllocator() const;
@@ -38,6 +39,7 @@ namespace vkt
             vma::Allocator CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance ) const;
 
         private:
+            const vkt::Instance & mInstance;
             vkt::PhysicalDevice mPhysicalDevice;
             vk::Device mDevice;
             vk::Queue mQueue;

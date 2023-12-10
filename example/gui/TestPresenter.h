@@ -9,7 +9,7 @@
 
 #include <chrono>
 
-namespace example
+namespace example::gui
 {
     class TestPresenter
     :
@@ -21,6 +21,7 @@ namespace example
 
             void Compute( vk::CommandBuffer inCommandBuffer ) const override;
             void Present( vk::CommandBuffer inCommandBuffer ) const override;
+            void Update( float inDelta );
 
         private:
             burst::PresentContext const & mContext;
@@ -42,8 +43,11 @@ namespace example
 
             struct PushConstants
             {
-                float mTime;
+                float mTime = 0.0f;
+                float mScale = 1.0f;
+                float mRayLength = 100.0f;
             } mPushConstants;
+            int mWorkGroups = 100;
     };
 }
 

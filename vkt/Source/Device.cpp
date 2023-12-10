@@ -4,6 +4,7 @@
 
 vkt::Device::Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::Instance & inInstance )
 :
+    mInstance( inInstance ),
     mPhysicalDevice( inPhysicalDevice ),
     mDevice( CreateDevice( inPhysicalDevice ) ),
     mQueue( mDevice.getQueue( inPhysicalDevice.FindQueueFamilyIndices().graphicsFamilyIndex.value(), 0 ) ),
@@ -82,6 +83,12 @@ vkt::Device::CreateAllocator( const vkt::PhysicalDevice & inPhysicalDevice, cons
     );
     theAllocatorInfo.instance = inInstance.GetVkInstance();
     return vma::createAllocator( theAllocatorInfo );
+}
+
+vkt::Instance const &
+vkt::Device::GetInstance() const
+{
+    return mInstance;
 }
 
 vk::Device

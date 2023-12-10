@@ -91,7 +91,7 @@ burst::Window::Poll() const
 }
 
 GLFWwindow *
-burst::Window::GetGLFWWindow()
+burst::Window::GetGLFWWindow() const
 {
     return mImpl->mWindow.get();
 }

@@ -23,6 +23,8 @@ namespace burst
 
             burst::PresentContext const & GetPresentContext() const;
 
+            const vkt::Swapchain & GetSwapchain();
+
         public:
             /**
              * @brief Renders a frame to the display.

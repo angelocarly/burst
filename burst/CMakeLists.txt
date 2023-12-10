@@ -2,6 +2,7 @@ set(
     HEADER_FILES
         Display.h
         Engine.h
+        GuiPresenter.h
         Presenter.h
         Utils.h
         VulkanConfig.h
@@ -12,6 +13,7 @@ set(
     SOURCE_FILES
         Source/Display.cpp
         Source/Engine.cpp
+        Source/GuiPresenter.cpp
         Source/Utils.cpp
         Source/VulkanConfig.cpp
         Source/Window.cpp
@@ -30,6 +32,7 @@ include_directories( ${BURST_ROOT_DIR} )
 target_link_libraries(
     Burst PUBLIC
         Vkt
+        Imgui
 )
 
 ### Libraries

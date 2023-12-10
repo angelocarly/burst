@@ -7,6 +7,7 @@ set( BURST_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}" )
 
 add_subdirectory( resources )
 
+add_subdirectory( lib )
 add_subdirectory( vkt )
 add_subdirectory( burst )
 add_subdirectory( example )

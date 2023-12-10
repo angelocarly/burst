@@ -59,7 +59,8 @@ burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * i
     mWindow( mInstance, inWidth, inHeight, inTitle ),
     mPhysicalDevice( mInstance, GetDeviceExtensions() ),
     mDevice( mPhysicalDevice, mInstance ),
-    mDisplay( mDevice, mWindow )
+    mDisplay( mDevice, mWindow ),
+    mGui( mDevice, mWindow, mDisplay.GetSwapchain(), * mDisplay.GetPresentContext().mRenderPass )
 {
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");
@@ -77,7 +78,6 @@ burst::Engine::~Engine()
 {
     spdlog::get( "burst" )->info( "Stopped engine" );
 }
-
 
 void
 burst::Engine::Run()
@@ -101,9 +101,9 @@ burst::Engine::Run()
 
         mWindow.Poll();
 
-        Update();
+        Update( theFrameDuration );
 
-        mDisplay.Render( GetPresenter() );
+        mDisplay.Render( * this );
 
         float theSecondDuration = ( frameTime.count() - mPreviousSecond.count() ) % 10000000000 / 1000000.0f;
         if( theSecondDuration > 1 )
@@ -139,4 +139,18 @@ burst::PresentContext const &
 burst::Engine::GetPresentContext()
 {
     return mDisplay.GetPresentContext();
+}
+
+void
+burst::Engine::Compute( vk::CommandBuffer inCommandBuffer ) const
+{
+    GetPresenter().Compute( inCommandBuffer );
+    mGui.Compute( inCommandBuffer );
+}
+
+void
+burst::Engine::Present( vk::CommandBuffer inCommandBuffer ) const
+{
+    GetPresenter().Present( inCommandBuffer );
+    mGui.Present( inCommandBuffer );
 }
