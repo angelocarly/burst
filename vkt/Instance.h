@@ -9,7 +9,7 @@ namespace vkt
     {
         public:
             Instance( std::vector< const char * > inInstanceExtensions );
-            ~Instance() = default;
+            ~Instance();
 
             vk::Instance GetVkInstance() const;
 

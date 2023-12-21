@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <string>
+#include <spdlog/spdlog.h>
 
 // ============================================== Impl =================================================================
 
@@ -29,18 +30,26 @@ class burst::Window::Impl
     public:
         std::unique_ptr< GLFWwindow, DestroyWindow > mWindow;
         vk::SurfaceKHR mSurface;
+        vkt::Instance const & mInstance;
 
     private:
         vk::SurfaceKHR CreateSurface( vkt::Instance & inInstance );
 };
 
 burst::Window::Impl::Impl( vkt::Instance & inInstance, int inWidth, int inHeight, const char * inTitle )
+:
+    mInstance( inInstance )
 {
     CreateWindow( inWidth, inHeight, inTitle );
     mSurface = CreateSurface( inInstance );
 }
 
-burst::Window::Impl::~Impl() = default;
+burst::Window::Impl::~Impl()
+{
+    spdlog::get( "vkt" )->error( "Destroying window" );
+
+    mInstance.GetVkInstance().destroy( mSurface );
+}
 
 void
 burst::Window::Impl::CreateWindow( int width, int height, const char * title)
@@ -76,7 +85,9 @@ burst::Window::Window( vkt::Instance & inInstance, int inWidth, int inHeight, co
 {
 }
 
-burst::Window::~Window() = default;
+burst::Window::~Window()
+{
+};
 
 bool
 burst::Window::ShouldClose() const

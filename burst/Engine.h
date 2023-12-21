@@ -37,9 +37,9 @@ namespace burst
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
 
             vkt::Instance mInstance;
-            burst::Window mWindow;
             vkt::PhysicalDevice mPhysicalDevice;
             vkt::Device mDevice;
+            burst::Window mWindow;
             burst::Display mDisplay;
 
             std::chrono::microseconds mPreviousFrameTime;

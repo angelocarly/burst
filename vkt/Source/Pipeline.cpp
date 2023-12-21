@@ -59,9 +59,16 @@ vkt::Pipeline::PushConstants( vk::CommandBuffer inCommandBuffer, vk::ShaderStage
     inCommandBuffer.pushConstants( mPipelineLayout, inShaderStageFlags, inOffset, inSize, inData );
 }
 
+vk::Pipeline
+vkt::Pipeline::GetVkPipeline() const
+{
+    return mPipeline;
+}
+
 vk::PipelineLayout
 vkt::Pipeline::GetVkPipelineLayout() const
 {
     return mPipelineLayout;
 }
+
 

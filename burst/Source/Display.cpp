@@ -1,3 +1,4 @@
+#include <spdlog/spdlog.h>
 #include "burst/Display.h"
 
 #include "burst/Presenter.h"
@@ -28,6 +29,8 @@ burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inW
 
 burst::Display::~Display()
 {
+    spdlog::get( "vkt" )->debug( "Destroying display" );
+
     // Wait until all rendering is done
     mDevice.GetVkDevice().waitIdle();
 }
