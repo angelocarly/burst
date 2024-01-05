@@ -4,6 +4,8 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 burst::ImageAsset
 burst::AssetLoader::LoadImage( std::filesystem::path inPath )
@@ -26,4 +28,19 @@ burst::AssetLoader::LoadImage( std::filesystem::path inPath )
 
     return theImage;
 
+}
+
+void
+burst::AssetLoader::SaveImage( burst::ImageAsset const & inImage, std::filesystem::path inPath )
+{
+    std::size_t channelCount = 4;
+    stbi_write_png
+    (
+        inPath.c_str(),
+        inImage.mWidth,
+        inImage.mHeight,
+        4,
+        inImage.mPixels.data(),
+        inImage.mWidth * channelCount * sizeof( std::uint8_t )
+    );
 }

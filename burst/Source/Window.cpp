@@ -46,7 +46,7 @@ burst::Window::Impl::Impl( vkt::Instance & inInstance, int inWidth, int inHeight
 
 burst::Window::Impl::~Impl()
 {
-    spdlog::get( "vkt" )->error( "Destroying window" );
+    spdlog::get( "vkt" )-> debug( "Destroying window" );
 
     mInstance.GetVkInstance().destroy( mSurface );
 }

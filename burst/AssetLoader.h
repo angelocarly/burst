@@ -16,6 +16,7 @@ namespace burst
     {
         public:
             static burst::ImageAsset LoadImage( std::filesystem::path inPath );
+            static void SaveImage( burst::ImageAsset const & inImage, std::filesystem::path inPath );
     };
 }
 

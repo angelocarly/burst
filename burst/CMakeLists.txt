@@ -3,6 +3,7 @@ set(
         AssetLoader.h
         Display.h
         Engine.h
+        Gui.h
         GuiPresenter.h
         Presenter.h
         Utils.h
@@ -15,6 +16,7 @@ set(
         Source/AssetLoader.cpp
         Source/Display.cpp
         Source/Engine.cpp
+        Source/Gui.cpp
         Source/GuiPresenter.cpp
         Source/Utils.cpp
         Source/VulkanConfig.cpp
