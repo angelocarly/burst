@@ -69,6 +69,13 @@ vkt::Instance::Instance( std::vector< const char * > inInstanceExtensions )
     CreateVulkanInstance( inInstanceExtensions );
 }
 
+vkt::Instance::~Instance()
+{
+    spdlog::get( "vkt" )->debug( "Destroying instance" );
+
+    mInstance.destroy();
+}
+
 void
 vkt::Instance::GetDebugUtilsMessengerCreateInfo( vk::DebugUtilsMessengerCreateInfoEXT & inCreateInfo ) const
 {

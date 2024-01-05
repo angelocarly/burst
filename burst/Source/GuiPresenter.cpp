@@ -47,10 +47,13 @@ burst::GuiPresenter::GuiPresenter( const vkt::Device & inDevice, const burst::Wi
 
 burst::GuiPresenter::~GuiPresenter()
 {
-    mDevice.GetVkDevice().destroy( mDescriptorPool );
+    mDevice.WaitIdle();
 
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+
+    mDevice.GetVkDevice().destroy( mDescriptorPool );
+
     ::ImGui::DestroyContext();
 }
 

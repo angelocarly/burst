@@ -109,7 +109,7 @@ vkt::Swapchain::InitializeSwapchainImages()
     auto swapchainImages = mDevice.GetVkDevice().getSwapchainImagesKHR( mSwapchain );
     for( auto swapchainImage : swapchainImages )
     {
-        mSwapchainImages.emplace_back( std::make_shared< vkt::Image >( mDevice, swapchainImage ) );
+        mSwapchainImages.emplace_back( std::make_shared< vkt::Image >( mDevice, swapchainImage, mExtent ) );
     }
 
     // Transition the images to presentable layout

@@ -72,7 +72,7 @@ vkt::PhysicalDevice::PhysicalDevice( const vkt::Instance & inInstance, std::vect
 
 vkt::PhysicalDevice::~PhysicalDevice()
 {
-
+    spdlog::get( "vkt" )->debug( "Destroying physical device" );
 }
 
 vk::PhysicalDevice

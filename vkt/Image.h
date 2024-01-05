@@ -12,11 +12,13 @@ namespace vkt
     {
         public:
             Image( vkt::Device const & inDevice );
-            Image( vkt::Device const & inDevice, vk::Image inImage, vma::Allocation inAllocation = nullptr );
+            Image( vkt::Device const & inDevice, vk::Image inImage, vk::Extent2D inExtent, vma::Allocation inAllocation = nullptr );
             ~Image();
 
             vk::Image GetVkImage() const;
             vk::ImageLayout GetVkImageLayout() const;
+            std::size_t GetWidth() const;
+            std::size_t GetHeight() const;
 
             void MemoryBarrier
             (
@@ -38,6 +40,9 @@ namespace vkt
             vk::Image mImage;
             vma::Allocation mAllocation;
             vk::ImageLayout mImageLayout;
+
+            std::size_t mWidth;
+            std::size_t mHeight;
     };
 
     class ImageFactory

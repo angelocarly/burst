@@ -30,8 +30,11 @@ namespace vkt
             vma::Allocator GetVmaAllocator() const;
             vk::CommandPool GetVkCommandPool() const;
             vkt::PhysicalDevice GetPhysicalDevice() const;
+
             vk::CommandBuffer BeginSingleTimeCommands() const;
             void EndSingleTimeCommands( vk::CommandBuffer & inCommandBuffer ) const;
+
+            void WaitIdle() const;
 
         private:
             vk::Device CreateDevice( const vkt::PhysicalDevice & inPhysicalDevice ) const;

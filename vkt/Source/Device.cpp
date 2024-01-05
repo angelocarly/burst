@@ -15,6 +15,8 @@ vkt::Device::Device( const vkt::PhysicalDevice & inPhysicalDevice, const vkt::In
 
 vkt::Device::~Device()
 {
+    spdlog::get( "vkt" )->debug( "Destroying device" );
+
     mDevice.waitIdle();
     mAllocator.destroy();
     mDevice.destroyCommandPool( mCommandPool );
@@ -147,5 +149,11 @@ vkt::Device::EndSingleTimeCommands( vk::CommandBuffer & inCommandBuffer ) const
     mDevice.destroyFence( theFence );
 
     mDevice.freeCommandBuffers( mCommandPool, inCommandBuffer );
+}
+
+void
+vkt::Device::WaitIdle() const
+{
+    mDevice.waitIdle();
 }
 

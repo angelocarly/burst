@@ -17,6 +17,7 @@ namespace vkt
             void BindPushDescriptorSet( vk::CommandBuffer inCommandBuffer, vk::WriteDescriptorSet inWriteDescriptorSet );
             void PushConstants( vk::CommandBuffer inCommandBuffer, vk::ShaderStageFlags inShaderStageFlags, std::uint32_t inOffset, std::uint32_t inSize, const void * inData );
 
+            vk::Pipeline GetVkPipeline() const;
             vk::PipelineLayout GetVkPipelineLayout() const;
 
         private:

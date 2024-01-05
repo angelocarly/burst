@@ -11,12 +11,14 @@ vkt::Image::Image( vkt::Device const & inDevice )
 {
 }
 
-vkt::Image::Image( vkt::Device const & inDevice, vk::Image inImage, vma::Allocation inAllocation )
+vkt::Image::Image( vkt::Device const & inDevice, vk::Image inImage, vk::Extent2D inExtent, vma::Allocation inAllocation )
 :
     mDevice( inDevice ),
     mImage( inImage ),
     mAllocation( inAllocation ),
-    mImageLayout( vk::ImageLayout::eUndefined )
+    mImageLayout( vk::ImageLayout::eUndefined ),
+    mWidth( inExtent.width ),
+    mHeight( inExtent.height )
 {
 }
 
@@ -93,6 +95,18 @@ vkt::Image::MemoryBarrier
     mImageLayout = inNewLayout;
 }
 
+std::size_t
+vkt::Image::GetWidth() const
+{
+    return mWidth;
+}
+
+std::size_t
+vkt::Image::GetHeight() const
+{
+    return mHeight;
+}
+
 // ============================================== Image ================================================================
 
 vkt::ImageFactory::ImageFactory( vkt::Device const & inDevice )
@@ -133,5 +147,5 @@ vkt::ImageFactory::CreateImage( std::size_t inWidth, std::size_t inHeight, vk::F
         )
     );
 
-    return std::make_shared< vkt::Image >( mDevice, imageAllocation.first, imageAllocation.second );
+    return std::make_shared< vkt::Image >( mDevice, imageAllocation.first, vk::Extent2D( inWidth, inHeight ), imageAllocation.second );
 }
