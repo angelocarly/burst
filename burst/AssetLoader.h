@@ -2,6 +2,7 @@
 #define Burst_AssetLoader_h
 
 #include <filesystem>
+#include <vector>
 
 namespace burst
 {
