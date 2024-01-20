@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include <string>
+#include <functional>
 
 namespace burst::gui
 {

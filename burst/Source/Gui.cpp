@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include <functional>
+
 burst::gui::ImageInspector::ImageInspector( std::string inTitle, vk::Extent2D inExtent, std::vector< std::pair< vk::Sampler, vk::ImageView > > inImages, std::function< void( glm::vec2 ) > inOnDraw )
 :
     mTitle( inTitle ),
