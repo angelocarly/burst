@@ -21,6 +21,13 @@ burst::AssetLoader::LoadImage( std::filesystem::path inPath )
     }
 
     std::vector< std::uint8_t > thePixels = std::vector< std::uint8_t >( pixels, pixels + texWidth * texHeight * channelCount );
+    for( std::size_t i = 0; i < texWidth * texHeight * texChannels; i += texChannels )
+    {
+        thePixels[ i + 0 ] = pow( thePixels[ i + 0 ] / 255.0f, 2.2f ) * 255;
+        thePixels[ i + 1 ] = pow( thePixels[ i + 1 ] / 255.0f, 2.2f ) * 255;
+        thePixels[ i + 2 ] = pow( thePixels[ i + 2 ] / 255.0f, 2.2f ) * 255;
+//        thePixels[ i + 3 ] = pow( thePixels[ i ], 2.2f );
+    }
     ImageAsset theImage = { ( std::size_t ) texWidth, ( std::size_t ) texHeight, std::move( thePixels ) };
 
     // Free buffer
