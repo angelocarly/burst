@@ -20,6 +20,7 @@ function( compile_shaders PROJECT INPUT_DIRECTORY OUTPUT_DIRECTORY GLSL_SOURCE_F
     foreach( GLSL ${GLSL_SOURCE_FILES} )
 
         get_filename_component( FILE_NAME ${GLSL} NAME )
+
         set(
                 SPIRV
                 "${OUTPUT_DIRECTORY}/${FILE_NAME}.spv"

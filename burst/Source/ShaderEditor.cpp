@@ -20,10 +20,10 @@
 #include <array>
 #include <spdlog/spdlog.h>
 
-burst::ShaderEditor::ShaderEditor( vkt::Device const & inDevice )
+burst::ShaderEditor::ShaderEditor( vkt::Device const & inDevice, std::string inPath )
 :
     mDevice( inDevice ),
-    mPath( "test.comp.glsl" )
+    mPath( inPath )
 {
     Init( mPath );
 }
@@ -177,4 +177,10 @@ vkt::ComputePipelinePtr
 burst::ShaderEditor::GetShader() const
 {
     return mCompute;
+}
+
+std::string
+burst::ShaderEditor::GetPath() const
+{
+    return mPath;
 }

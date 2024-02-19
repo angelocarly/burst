@@ -14,14 +14,16 @@ namespace burst
     class ShaderEditor
     {
         public:
-            ShaderEditor( vkt::Device const & inDevice );
+            ShaderEditor( vkt::Device const & inDevice, std::string inPath );
             ~ShaderEditor();
 
             void Update();
             void Display();
             void BindShader();
+            std::string GetPath() const;
 
             vkt::ComputePipelinePtr GetShader() const;
+            void CompileShader();
 
         private:
 
@@ -38,7 +40,6 @@ namespace burst
              */
             void Save();
 
-            void CompileShader();
 
             void Init( std::string inPath );
 
