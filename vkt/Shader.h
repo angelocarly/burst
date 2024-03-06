@@ -11,6 +11,7 @@ namespace vkt
     {
         public:
             static vk::ShaderModule CreateVkShaderModule( const vkt::Device & inDevice, const std::filesystem::path & inPath );
+            static std::string CompileShader( std::filesystem::path inPath );
     };
 }
 

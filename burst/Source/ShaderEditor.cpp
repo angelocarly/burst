@@ -8,6 +8,7 @@
 #include "vkt/ComputePipeline.h"
 #include "vkt/Shader.h"
 #include "vkt/DescriptorSetLayout.h"
+#include "burst/Utils.h"
 
 #include <glm/vec2.hpp>
 
@@ -38,22 +39,34 @@ burst::ShaderEditor::Init( std::string inPath )
 {
     // Initialize the editor and watch for changes
     glm::vec2 pixelScale = glm::vec2( 1.0f );
-    mZep = std::make_shared<ZepWrapper>( inPath, Zep::NVec2f(pixelScale.x, pixelScale.y), [](std::shared_ptr<Zep::ZepMessage> spMessage) -> void {
-    });
+    if( burst::Utils::IsTargetApple() )
+    {
+        pixelScale = glm::vec2( 2.0f );
+    }
+
+    mZep = std::make_shared<ZepWrapper>
+    (
+        "zep.cfg",
+        Zep::NVec2f(pixelScale.x, pixelScale.y),
+        [](std::shared_ptr<Zep::ZepMessage> spMessage) -> void
+        {
+//            if( spMessage.get()->messageId == Zep::Msg::)
+//            spdlog::info("zep: {}", spMessage.get()->str );
+        }
+    );
+    mZep->GetEditor().InitWithFile( inPath );
 
     // This is an example of adding different fonts for text styles.
     // If you ":e test.md" in the editor and type "# Heading 1" you will
     // see that Zep picks a different font size for the heading.
-    auto& display = mZep->GetEditor().GetDisplay();
-    auto pImFont = ImGui::GetIO().Fonts[0].Fonts[0];
-    auto pixelHeight = pImFont->FontSize;
-    display.SetFont(Zep::ZepTextType::UI, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight)));
-    display.SetFont(Zep::ZepTextType::Text, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight)));
-    display.SetFont(Zep::ZepTextType::Heading1, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.5)));
-    display.SetFont(Zep::ZepTextType::Heading2, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.25)));
-    display.SetFont(Zep::ZepTextType::Heading3, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.125)));
-
-    mZep->GetEditor().InitWithFileOrDir( inPath );
+//    auto& display = mZep->GetEditor().GetDisplay();
+//    auto pImFont = ImGui::GetIO().Fonts[0].Fonts[0];
+//    auto pixelHeight = pImFont->FontSize;
+//    display.SetFont(Zep::ZepTextType::UI, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight)));
+//    display.SetFont(Zep::ZepTextType::Text, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight)));
+//    display.SetFont(Zep::ZepTextType::Heading1, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.5)));
+//    display.SetFont(Zep::ZepTextType::Heading2, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.25)));
+//    display.SetFont(Zep::ZepTextType::Heading3, std::make_shared<Zep::ZepFont_ImGui>(display, pImFont, int(pixelHeight * 1.125)));
 }
 
 void
@@ -128,22 +141,7 @@ burst::ShaderEditor::Save()
 void
 burst::ShaderEditor::CompileShader()
 {
-    // First compile using glslc
-    std::stringstream command;
-    command << "/usr/bin/glslangValidator --target-env vulkan1.0 -V " << mPath << " -o " << mPath << ".spv";
-
-    spdlog::info( "Running command: {}", command.str() );
-
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr< FILE, decltype(&pclose) > pipe( popen( command.str().c_str(), "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
-    spdlog::info( "Compiled shader output: {}", result );
+    vkt::Shader::CompileShader( mPath );
 
     // Build shader
     auto shaderModule = vkt::Shader::CreateVkShaderModule( mDevice, mPath );

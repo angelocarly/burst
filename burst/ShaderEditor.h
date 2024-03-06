@@ -50,7 +50,6 @@ namespace burst
                     , Callback(fnCommandCB)
                 {
                     zepEditor.RegisterCallback(this);
-
                 }
 
                 virtual Zep::ZepEditor& GetEditor() const override

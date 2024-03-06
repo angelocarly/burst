@@ -14,6 +14,8 @@
 
 #include <chrono>
 
+#include <filesystem>
+
 namespace
 {
     std::vector< const char * >
@@ -62,6 +64,7 @@ burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * i
     mDisplay( mDevice, mWindow ),
     mGui( mDevice, mWindow, mDisplay.GetSwapchain(), * mDisplay.GetPresentContext().mRenderPass )
 {
+
     spdlog::set_level(spdlog::level::debug);
     spdlog::stdout_color_mt("burst");
 
@@ -120,7 +123,13 @@ burst::Engine::Run()
 vkt::Instance
 burst::Engine::CreateInstance( VulkanConfig inVulkanConfig ) const
 {
+    // glfw changes the working directory to resources on macOS. https://www.glfw.org/docs/latest/intro_guide.html
+    // The following hint disables this behaviour.
+    glfwInitHint( GLFW_COCOA_CHDIR_RESOURCES, GLFW_FALSE );
+
+    // Setup glfw
     glfwInit();
+
     // Check glfw Vulkan support
     // Note: GLFW should be initialized before requesting Vulkan support
     if( glfwVulkanSupported() == GLFW_FALSE )

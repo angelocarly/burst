@@ -8,6 +8,8 @@
 #include <string>
 #include <spdlog/spdlog.h>
 
+#include <filesystem>
+
 // ============================================== Impl =================================================================
 
 class burst::Window::Impl

@@ -7,6 +7,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <filesystem>
+
 VkResult
 vkCreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
 {
@@ -62,6 +64,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback
 
 vkt::Instance::Instance( std::vector< const char * > inInstanceExtensions )
 {
+    auto test = std::filesystem::path( "." );
+    auto a = absolute( test );
     // Register the logger
     spdlog::stdout_color_mt("vkt");
 

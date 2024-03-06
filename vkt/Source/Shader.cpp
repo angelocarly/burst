@@ -6,12 +6,14 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <spdlog/spdlog.h>
 
 namespace
 {
     std::vector< char > const
     ReadFile( std::filesystem::path const & inPath )
     {
+
         std::error_code error;
 
         if( !std::filesystem::exists( inPath ) )
@@ -44,4 +46,53 @@ vkt::Shader::CreateVkShaderModule( vkt::Device const & inDevice, std::filesystem
     );
 
     return inDevice.GetVkDevice().createShaderModule( shaderModuleCreateInfo );
+}
+
+namespace
+{
+    bool
+    IsTargetApple()
+    {
+#ifdef __APPLE__
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    std::string GetGlslValidator()
+    {
+        if( IsTargetApple() )
+        {
+            return "/usr/local/bin/glslangValidator";
+        }
+        else
+        {
+            // linux
+            return "/usr/bin/glslangValidator";
+        }
+    }
+}
+
+std::string
+vkt::Shader::CompileShader( std::filesystem::path inPath )
+{
+    // First compile using glslc
+    std::stringstream command;
+    command << GetGlslValidator() << " --target-env vulkan1.0 -V " << inPath << " -o " << inPath << ".spv";
+
+    spdlog::info( "Running command: {}", command.str() );
+
+    std::array<char, 128> buffer{};
+    std::string result;
+    std::unique_ptr< FILE, decltype(&pclose) > pipe( popen( command.str().c_str(), "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    spdlog::info( "Compiled shader output: {}", result );
+
+    return result;
 }
