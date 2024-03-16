@@ -5,6 +5,7 @@ set(
         Engine.h
         Gui.h
         GuiPresenter.h
+        Image.h
         Presenter.h
         ShaderEditor.h
         Utils.h
@@ -19,6 +20,7 @@ set(
         Source/Engine.cpp
         Source/Gui.cpp
         Source/GuiPresenter.cpp
+        Source/Image.cpp
         Source/ShaderEditor.cpp
         Source/Utils.cpp
         Source/VulkanConfig.cpp

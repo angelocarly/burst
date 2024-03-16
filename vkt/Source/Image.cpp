@@ -1,6 +1,8 @@
 #include "vkt/Image.h"
 
 #include "vkt/Device.h"
+#include "burst/Image.h"
+
 
 #include <vk_mem_alloc.hpp>
 
