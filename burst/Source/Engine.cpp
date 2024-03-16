@@ -91,6 +91,8 @@ burst::Engine::Run()
     );
     std::size_t frameCount;
 
+    auto presenters = MultiPresenter( { &mGui, this } );
+
     while( !mWindow.ShouldClose() )
     {
         frameCount++;
@@ -106,7 +108,7 @@ burst::Engine::Run()
 
         Update( theFrameDuration );
 
-        mDisplay.Render( * this );
+        mDisplay.Render( presenters );
 
         float theSecondDuration = ( frameTime.count() - mPreviousSecond.count() ) % 10000000000 / 1000000.0f;
         if( theSecondDuration > 1 )
@@ -148,18 +150,4 @@ burst::PresentContext const &
 burst::Engine::GetPresentContext()
 {
     return mDisplay.GetPresentContext();
-}
-
-void
-burst::Engine::Compute( vk::CommandBuffer inCommandBuffer ) const
-{
-    GetPresenter().Compute( inCommandBuffer );
-    mGui.Compute( inCommandBuffer );
-}
-
-void
-burst::Engine::Present( vk::CommandBuffer inCommandBuffer ) const
-{
-    GetPresenter().Present( inCommandBuffer );
-    mGui.Present( inCommandBuffer );
 }

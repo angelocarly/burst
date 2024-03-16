@@ -14,6 +14,37 @@
 
 namespace burst
 {
+    class MultiPresenter
+    :
+        public Presenter
+    {
+        public:
+            MultiPresenter( std::vector< Presenter * > inPresenters )
+            :
+                mPresenters( inPresenters )
+            {
+            }
+            ~MultiPresenter() = default;
+
+            void Compute( vk::CommandBuffer inCommandBuffer ) const override
+            {
+                for( auto presenter : mPresenters )
+                {
+                    presenter->Compute( inCommandBuffer );
+                }
+            }
+            void Present( vk::CommandBuffer inCommandBuffer ) const override
+            {
+                for( auto presenter : mPresenters )
+                {
+                    presenter->Present( inCommandBuffer );
+                }
+            }
+
+        private:
+            std::vector< Presenter * > mPresenters;
+    };
+
     class Engine
     :
         public Presenter
@@ -27,11 +58,6 @@ namespace burst
             burst::PresentContext const & GetPresentContext();
 
             virtual void Update( float inDelta ) = 0;
-            virtual burst::Presenter & GetPresenter() const = 0;
-
-        public:
-            void Compute( vk::CommandBuffer inCommandBuffer ) const;
-            void Present( vk::CommandBuffer inCommandBuffer ) const;
 
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
