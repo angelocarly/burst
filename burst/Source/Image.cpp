@@ -20,6 +20,12 @@ burst::Image::~Image()
     mDevice.GetVkDevice().destroyImageView( mImageView );
 }
 
+vk::DescriptorImageInfo
+burst::Image::CreateDescriptorImageInfo() const
+{
+    return { mSampler, mImageView, mImage->GetVkImageLayout() };
+}
+
 std::shared_ptr< burst::Image >
 burst::ImageFactory::Create( vkt::Device const & inDevice, glm::ivec2 inSize, vk::ImageLayout inLayout )
 {

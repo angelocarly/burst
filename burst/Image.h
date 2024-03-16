@@ -18,6 +18,8 @@ namespace burst
             vk::Sampler GetSampler() const { return mSampler; }
             vk::ImageView GetImageView() const { return mImageView; }
 
+            vk::DescriptorImageInfo CreateDescriptorImageInfo() const;
+
             friend class ImageFactory;
 
         private:
