@@ -34,6 +34,23 @@ burst::ShaderEditor::~ShaderEditor()
 
 }
 
+namespace
+{
+    Zep::NVec4f ParseHex( std::string inHex )
+    {
+        if( inHex.size() != 6 )
+        {
+            return Zep::NVec4f( 1.0f, 1.0f, 1.0f, 1.0f );
+        }
+
+        auto r = std::stoi( inHex.substr( 0, 2 ), nullptr, 16 ) / 255.0f;
+        auto g = std::stoi( inHex.substr( 2, 2 ), nullptr, 16 ) / 255.0f;
+        auto b = std::stoi( inHex.substr( 4, 2 ), nullptr, 16 ) / 255.0f;
+
+        return Zep::NVec4f( r, g, b, 1.0f );
+    }
+}
+
 void
 burst::ShaderEditor::Init( std::string inPath )
 {
@@ -55,6 +72,20 @@ burst::ShaderEditor::Init( std::string inPath )
         }
     );
     mZep->GetEditor().InitWithFile( inPath );
+
+    // Theme configuration
+    mZep->GetEditor().GetTheme().SetThemeType( Zep::ThemeType::Dark );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Background, ParseHex( "1e1e1e" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::CursorInsert, ParseHex( "79c0ff" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::CursorNormal, ParseHex( "79c0ff" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::CursorLineBackground, ParseHex( "303030" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Keyword, ParseHex( "ff7b72" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Number, ParseHex( "79c0ff" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Comment, ParseHex( "a5d6ff" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::String, ParseHex( "a5d6ff" ) );
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Text, ParseHex( "ffa657" ) );
+
+    mZep->GetEditor().GetTheme().SetColor( Zep::ThemeColor::Text, Zep::NVec4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
 
     // This is an example of adding different fonts for text styles.
     // If you ":e test.md" in the editor and type "# Heading 1" you will
