@@ -21,12 +21,12 @@ namespace burst
             /**
              * @brief process any command buffer events
              */
-            virtual void Compute( vk::CommandBuffer inCommandBuffer ) const = 0;
+            virtual void Compute( vk::CommandBuffer inCommandBuffer ) = 0;
 
             /**
              * @brief present to the current frame. The corresponding renderpass is already bound.
              */
-            virtual void Present( vk::CommandBuffer inCommandBuffer ) const = 0;
+            virtual void Present( vk::CommandBuffer inCommandBuffer ) = 0;
     };
 }
 

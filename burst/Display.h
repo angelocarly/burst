@@ -29,7 +29,7 @@ namespace burst
             /**
              * @brief Renders a frame to the display.
              */
-            void Render( burst::Presenter const & inPresenter );
+            void Render( burst::Presenter & inPresenter );
 
         private:
             void InitializeCommandBuffers();

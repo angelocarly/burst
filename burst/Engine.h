@@ -26,14 +26,14 @@ namespace burst
             }
             ~MultiPresenter() = default;
 
-            void Compute( vk::CommandBuffer inCommandBuffer ) const override
+            void Compute( vk::CommandBuffer inCommandBuffer ) override
             {
                 for( auto presenter : mPresenters )
                 {
                     presenter->Compute( inCommandBuffer );
                 }
             }
-            void Present( vk::CommandBuffer inCommandBuffer ) const override
+            void Present( vk::CommandBuffer inCommandBuffer ) override
             {
                 for( auto presenter : mPresenters )
                 {

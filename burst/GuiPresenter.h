@@ -20,8 +20,8 @@ namespace burst
             GuiPresenter( const vkt::Device & inDevice, const burst::Window & inWindow, const vkt::Swapchain & inSwapchain, const vkt::RenderPass & inRenderPass );
             ~GuiPresenter();
 
-            void Compute( vk::CommandBuffer inCommandBuffer ) const;
-            void Present( vk::CommandBuffer inCommandBuffer ) const;
+            void Compute( vk::CommandBuffer inCommandBuffer );
+            void Present( vk::CommandBuffer inCommandBuffer );
 
         private:
             static void CheckVkResult( VkResult inResult );

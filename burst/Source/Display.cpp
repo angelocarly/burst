@@ -36,7 +36,7 @@ burst::Display::~Display()
 }
 
 void
-burst::Display::Render( burst::Presenter const & inPresenter )
+burst::Display::Render( burst::Presenter & inPresenter )
 {
     std::uint32_t theFrameIndex = mSwapchain.RetrieveNextImage();
 

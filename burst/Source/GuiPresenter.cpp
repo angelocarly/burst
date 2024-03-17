@@ -198,13 +198,13 @@ burst::GuiPresenter::SetImGuiStyle( ImGuiIO & io )
 }
 
 void
-burst::GuiPresenter::Compute( vk::CommandBuffer inCommandBuffer ) const
+burst::GuiPresenter::Compute( vk::CommandBuffer inCommandBuffer )
 {
 
 }
 
 void
-burst::GuiPresenter::Present( vk::CommandBuffer inCommandBuffer ) const
+burst::GuiPresenter::Present( vk::CommandBuffer inCommandBuffer )
 {
     // Draw to screen
     ImGui::Render();
