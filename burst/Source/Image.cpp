@@ -105,3 +105,82 @@ burst::ImageFactory::Create( vkt::Device const & inDevice, glm::ivec2 inSize, vk
 
     return std::make_shared< burst::Image >( inDevice, image, sampler, imageView );
 }
+
+std::shared_ptr< burst::Image >
+burst::ImageFactory::CreateColorLookup( vkt::Device const & inDevice, std::size_t inSize, vk::ImageLayout inLayout )
+{
+    // Image
+    auto image = vkt::ImageFactory( inDevice ).CreateColorLookupImage
+    (
+        inSize,
+        vk::Format::eR8G8B8A8Unorm,
+        vk::ImageTiling::eOptimal,
+        vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc,
+        vma::AllocationCreateFlagBits::eDedicatedMemory,
+        "Color lookup Image",
+        1
+    );
+
+    auto commandBuffer = inDevice.BeginSingleTimeCommands();
+    {
+        // Image layout
+        image->MemoryBarrier
+        (
+            commandBuffer,
+            inLayout,
+            vk::AccessFlagBits::eNone,
+            vk::AccessFlagBits::eShaderRead,
+            vk::PipelineStageFlagBits::eAllCommands,
+            vk::PipelineStageFlagBits::eComputeShader,
+            vk::DependencyFlagBits::eByRegion
+        );
+    }
+    inDevice.EndSingleTimeCommands( commandBuffer );
+
+    // Sampler
+    vk::Sampler sampler = inDevice.GetVkDevice().createSampler
+    (
+        vk::SamplerCreateInfo
+        (
+            vk::SamplerCreateFlags(),
+            vk::Filter::eNearest,
+            vk::Filter::eNearest,
+            vk::SamplerMipmapMode::eNearest,
+            vk::SamplerAddressMode::eClampToEdge,
+            vk::SamplerAddressMode::eClampToEdge,
+            vk::SamplerAddressMode::eClampToEdge,
+            0.0f,
+            VK_FALSE,
+            16.0f,
+            VK_FALSE,
+            vk::CompareOp::eAlways,
+            0.0f,
+            0.0f,
+            vk::BorderColor::eIntOpaqueBlack,
+            VK_FALSE
+        )
+    );
+
+    // Image view
+    vk::ImageView imageView = inDevice.GetVkDevice().createImageView
+    (
+        vk::ImageViewCreateInfo
+        (
+            vk::ImageViewCreateFlags(),
+            image->GetVkImage(),
+            vk::ImageViewType::e1D,
+            vk::Format::eR8G8B8A8Unorm,
+            vk::ComponentMapping(),
+            vk::ImageSubresourceRange
+            (
+                vk::ImageAspectFlagBits::eColor,
+                0,
+                1,
+                0,
+                1
+            )
+        )
+    );
+
+    return std::make_shared< burst::Image >( inDevice, image, sampler, imageView );
+}

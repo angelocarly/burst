@@ -52,6 +52,8 @@ namespace vkt
             ~ImageFactory();
 
             ImagePtr CreateImage( std::size_t inWidth, std::size_t inHeight, vk::Format inFormat, vk::ImageTiling inTiling, vk::ImageUsageFlags inUsageFlags, vma::AllocationCreateFlags inAllocationCreateFlags, const std::string & inAllocationName, std::size_t inArrayLayers ) const;
+            ImagePtr CreateColorLookupImage( std::size_t inWidth, vk::Format inFormat, vk::ImageTiling inTiling, vk::ImageUsageFlags inUsageFlags, vma::AllocationCreateFlags inAllocationCreateFlags, const std::string & inAllocationName, std::size_t inArrayLayers ) const;
+
             void DestroyImage( Image const & inImage ) const;
 
         private:

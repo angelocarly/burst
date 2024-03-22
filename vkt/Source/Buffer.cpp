@@ -51,6 +51,12 @@ vkt::Buffer::GetSize()
     return mSize;
 }
 
+vk::DescriptorBufferInfo
+vkt::Buffer::GetVkDescriptorBufferInfo()
+{
+    return vk::DescriptorBufferInfo( mBuffer, 0, mSize );
+}
+
 // =====================================================================================================================
 
 vkt::BufferFactory::BufferFactory( vkt::Device const & inDevice )

@@ -33,6 +33,7 @@ namespace burst
     {
         public:
             std::shared_ptr< Image > Create( vkt::Device const & inDevice, glm::ivec2 inSize, vk::ImageLayout inLayout );
+            std::shared_ptr< Image > CreateColorLookup( vkt::Device const & inDevice, std::size_t inSize, vk::ImageLayout inLayout );
     };
 }
 

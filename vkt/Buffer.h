@@ -31,6 +31,7 @@ namespace vkt
             void UnMapMemory();
 
             vk::DeviceSize GetSize();
+            vk::DescriptorBufferInfo GetVkDescriptorBufferInfo();
 
         private:
             vkt::Device const & mDevice;

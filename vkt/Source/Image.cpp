@@ -151,3 +151,34 @@ vkt::ImageFactory::CreateImage( std::size_t inWidth, std::size_t inHeight, vk::F
 
     return std::make_shared< vkt::Image >( mDevice, imageAllocation.first, vk::Extent2D( inWidth, inHeight ), imageAllocation.second );
 }
+
+vkt::ImagePtr
+vkt::ImageFactory::CreateColorLookupImage( std::size_t inWidth, vk::Format inFormat, vk::ImageTiling inTiling, vk::ImageUsageFlags inUsageFlags, vma::AllocationCreateFlags inAllocationCreateFlags, const std::string & inAllocationName, std::size_t inArrayLayers ) const
+{
+    auto imageAllocation = mDevice.GetVmaAllocator().createImage
+    (
+        vk::ImageCreateInfo
+        (
+            vk::ImageCreateFlags(),
+            vk::ImageType::e1D,
+            inFormat,
+            vk::Extent3D( inWidth, 1, 1 ),
+            1,
+            1,
+            vk::SampleCountFlagBits::e1,
+            vk::ImageTiling::eOptimal,
+            inUsageFlags,
+            vk::SharingMode::eExclusive,
+            1,
+            0,
+            vk::ImageLayout::eUndefined
+        ),
+        vma::AllocationCreateInfo
+        (
+            inAllocationCreateFlags,
+            vma::MemoryUsage::eAuto
+        )
+    );
+
+    return std::make_shared< vkt::Image >( mDevice, imageAllocation.first, vk::Extent2D( inWidth, 1 ), imageAllocation.second );
+}
