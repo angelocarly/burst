@@ -6,12 +6,14 @@
 #include <glm/glm.hpp>
 
 #include <functional>
+#include <spdlog/spdlog.h>
 
 burst::gui::ImageInspector::ImageInspector( std::string inTitle, vk::Extent2D inExtent, std::vector< std::pair< vk::Sampler, vk::ImageView > > inImages, std::function< void( glm::vec2 ) > inOnDraw )
 :
     mTitle( inTitle ),
     mExtent( inExtent ),
-    mOnDraw( inOnDraw )
+    mOnDraw( inOnDraw ),
+    mTranslate( { inExtent.width / -2.0f, inExtent.height / -2.0f } )
 {
     for( auto image : inImages )
     {
