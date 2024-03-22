@@ -99,8 +99,7 @@ burst::GuiPresenter::InitializeImGui( const burst::Window & inWindow, const vkt:
     init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
     init_info.Allocator = nullptr;
     init_info.CheckVkResultFn = GuiPresenter::CheckVkResult;
-    init_info.RenderPass = inRenderPass.GetVkRenderPass();
-    ImGui_ImplVulkan_Init( & init_info );
+    ImGui_ImplVulkan_Init( & init_info, inRenderPass.GetVkRenderPass() );
 
     // Create fonts
     ImGui_ImplVulkan_CreateFontsTexture();

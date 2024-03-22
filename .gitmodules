@@ -13,4 +13,4 @@
 	url = https://github.com/aiekick/ImGuiFileDialog
 [submodule "lib/zep"]
 	path = lib/zep
-	url = git@github.com:Rezonality/zep.git
+	url = git@github.com:angelocarly/zep.git
