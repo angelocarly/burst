@@ -59,6 +59,8 @@ namespace burst
 
             virtual void Update( float inDelta ) = 0;
 
+            float GetRunTime();
+
         private:
             vkt::Instance CreateInstance( VulkanConfig inVulkanConfig ) const;
 
@@ -70,6 +72,7 @@ namespace burst
 
             std::chrono::microseconds mPreviousFrameTime;
             std::chrono::microseconds mPreviousSecond;
+            std::chrono::microseconds mStartTime;
 
             burst::GuiPresenter mGui;
     };

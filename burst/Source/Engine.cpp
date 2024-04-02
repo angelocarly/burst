@@ -70,6 +70,11 @@ burst::Engine::Engine( std::size_t inWidth, std::size_t inHeight, const char * i
 
     spdlog::get( "burst" )->info( "Started engine" );
 
+    mStartTime = std::chrono::duration_cast<std::chrono::microseconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+
     mPreviousFrameTime = std::chrono::duration_cast<std::chrono::microseconds>
     (
         std::chrono::system_clock::now().time_since_epoch()
@@ -150,4 +155,13 @@ burst::PresentContext const &
 burst::Engine::GetPresentContext()
 {
     return mDisplay.GetPresentContext();
+}
+
+float burst::Engine::GetRunTime()
+{
+    auto currentTime = std::chrono::duration_cast<std::chrono::microseconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    return ( currentTime.count() - mStartTime.count() ) % 10000000000 / 1000000.0f;
 }
