@@ -9,10 +9,16 @@ namespace vkt
     class Swapchain
     {
         public:
-            Swapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface );
+            struct FrameInfo
+            {
+                std::size_t mCurrentFrame;
+                std::size_t mImageIndex;
+            };
+        public:
+            Swapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface, vk::Extent2D inExtent );
             ~Swapchain();
 
-            std::uint32_t RetrieveNextImage() const;
+            FrameInfo RetrieveNextImage() const;
             void SubmitCommandBuffer( std::uint32_t inImageIndex, vk::CommandBuffer inCommandBuffer );
 
             std::size_t GetMinImageCount() const { return 3; };
@@ -24,8 +30,7 @@ namespace vkt
             vk::Extent2D GetExtent() const;
 
         private:
-            vk::SwapchainKHR CreateSwapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface ) const;
-            vk::Extent2D PollExtent( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface ) const;
+            vk::SwapchainKHR CreateSwapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface, vk::Extent2D inExtent ) const;
             void PresentImage( uint32_t inImageIndex, vk::Semaphore const & inWaitSemaphore ) const;
 
             const vkt::Device & mDevice;

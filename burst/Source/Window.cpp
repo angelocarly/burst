@@ -5,6 +5,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+
 #include <string>
 #include <spdlog/spdlog.h>
 
@@ -113,4 +115,12 @@ vk::SurfaceKHR
 burst::Window::GetSurface() const
 {
     return mImpl->mSurface;
+}
+
+glm::ivec2
+burst::Window::GetSize() const
+{
+    glm::ivec2 size;
+    glfwGetWindowSize( mImpl->mWindow.get(), & size.x, & size.y );
+    return size;
 }

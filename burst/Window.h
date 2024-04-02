@@ -5,6 +5,7 @@
 
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <memory>
 
 namespace burst
@@ -32,6 +33,8 @@ namespace burst
              * @brief Polls for input and resize events.
              */
             void Poll() const;
+
+            glm::ivec2 GetSize() const;
 
             vk::SurfaceKHR GetSurface() const;
 

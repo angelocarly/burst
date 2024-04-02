@@ -4,11 +4,11 @@
 
 #include <spdlog/spdlog.h>
 
-vkt::Swapchain::Swapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface )
+vkt::Swapchain::Swapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface, vk::Extent2D inExtent )
 :
     mDevice( inDevice ),
-    mExtent( PollExtent( inDevice, inSurface ) ),
-    mSwapchain( CreateSwapchain( inDevice, inSurface ) )
+    mExtent( inExtent ),
+    mSwapchain( CreateSwapchain( inDevice, inSurface, inExtent ) )
 {
     InitializeSwapchainImages();
     InitializeSynchronizationObjects();
@@ -40,23 +40,15 @@ vkt::Swapchain::~Swapchain()
     mDevice.GetVkDevice().destroy( mSwapchain );
 }
 
-vk::Extent2D
-vkt::Swapchain::PollExtent( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface ) const
-{
-    auto physicalDevice = inDevice.GetPhysicalDevice();
-    auto surfaceCapabilities = physicalDevice.GetVkPhysicalDevice().getSurfaceCapabilitiesKHR( inSurface );
-    return surfaceCapabilities.currentExtent;
-}
-
 vk::SwapchainKHR
-vkt::Swapchain::CreateSwapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface ) const
+vkt::Swapchain::CreateSwapchain( const vkt::Device & inDevice, const vk::SurfaceKHR & inSurface, vk::Extent2D inExtent ) const
 {
     // Supported hardware capabilities and formats
     auto physicalDevice = inDevice.GetPhysicalDevice();
     auto surfaceCapabilities = physicalDevice.GetVkPhysicalDevice().getSurfaceCapabilitiesKHR( inSurface );
     auto surfaceFormats = physicalDevice.GetVkPhysicalDevice().getSurfaceFormatsKHR( inSurface );
     auto presentModes = physicalDevice.GetVkPhysicalDevice().getSurfacePresentModesKHR( inSurface );
-    auto extent = surfaceCapabilities.currentExtent;
+    auto extent = inExtent;
 
     const uint32_t graphicsFamilyIndex = inDevice.GetPhysicalDevice().FindQueueFamilyIndices().graphicsFamilyIndex.value();
 
@@ -85,7 +77,7 @@ vkt::Swapchain::CreateSwapchain( const vkt::Device & inDevice, const vk::Surface
     (
         vk::SwapchainCreateFlagsKHR(),
         inSurface,
-        3,
+        surfaceCapabilities.minImageCount,
         GetImageFormat(),
         GetColorSpace(),
         extent,
@@ -192,11 +184,14 @@ vkt::Swapchain::InitializeSynchronizationObjects()
     }
 }
 
-std::uint32_t
+
+vkt::Swapchain::FrameInfo
 vkt::Swapchain::RetrieveNextImage() const
 {
+//    spdlog::get("vkt")->debug("Waiting on next fence, frame: {}", mCurrentFrame );
     while( vk::Result::eTimeout == mDevice.GetVkDevice().waitForFences( mCommandBufferExecutedFence[ mCurrentFrame ], VK_TRUE, UINT64_MAX ));
     mDevice.GetVkDevice().resetFences( mCommandBufferExecutedFence[ mCurrentFrame ] );
+//    spdlog::get("vkt")->debug("Retrieved fence, frame: {}", mCurrentFrame );
 
     // Block until a new image is acquired
     uint32_t imageIndex = 0;
@@ -210,15 +205,22 @@ vkt::Swapchain::RetrieveNextImage() const
         & imageIndex
     );
 
+//    spdlog::get("vkt")->debug("Acquired image with index: {}", imageIndex );
+
     // Reset the fence
     mDevice.GetVkDevice().resetFences( mCommandBufferExecutedFence[ mCurrentFrame ] );
 
-    return imageIndex;
+    return FrameInfo
+    {
+        mCurrentFrame,
+        imageIndex
+    };
 }
 
 void
 vkt::Swapchain::SubmitCommandBuffer( std::uint32_t inImageIndex, vk::CommandBuffer inCommandBuffer )
 {
+//    spdlog::get("vkt")->debug("Submitting commandbuffer, image: {}, frame: {}", inImageIndex, mCurrentFrame );
     vk::PipelineStageFlags theDstStageFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
     mDevice.GetQueue().submit
     (

@@ -10,7 +10,7 @@
 burst::Display::Display( const vkt::Device & inDevice, const burst::Window & inWindow )
 :
     mDevice( inDevice ),
-    mSwapchain( inDevice, inWindow.GetSurface() ),
+    mSwapchain( inDevice, inWindow.GetSurface(), vk::Extent2D( inWindow.GetSize().x, inWindow.GetSize().y ) ),
     mRenderPass( std::make_shared< vkt::RenderPass >( mDevice, mSwapchain.GetImageFormat() ) ),
     mPresentContext(
         burst::PresentContext
@@ -38,20 +38,20 @@ burst::Display::~Display()
 void
 burst::Display::Render( burst::Presenter & inPresenter )
 {
-    std::uint32_t theFrameIndex = mSwapchain.RetrieveNextImage();
+    auto frameInfo = mSwapchain.RetrieveNextImage();
 
     // Begin the current frame's draw commands
-    auto commandBuffer = mCommandBuffers[ theFrameIndex ];
+    auto commandBuffer = mCommandBuffers[ frameInfo.mCurrentFrame ];
     commandBuffer.begin( vk::CommandBufferBeginInfo( vk::CommandBufferUsageFlags() ) );
     {
-        auto image = mSwapchain.GetImages()[ theFrameIndex ];
+        auto image = mSwapchain.GetImages()[ frameInfo.mCurrentFrame ];
 
         /*
          * Process compute commands
          */
         inPresenter.Compute( commandBuffer );
 
-        mRenderPass->Begin( commandBuffer, mFramebuffers[ theFrameIndex ]->GetVkFramebuffer(), vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
+        mRenderPass->Begin( commandBuffer, mFramebuffers[ frameInfo.mCurrentFrame ]->GetVkFramebuffer(), vk::Rect2D( vk::Offset2D( 0, 0 ), mSwapchain.GetExtent() ), mClearValue );
         {
             // Set dynamic state
             commandBuffer.setViewport( 0, vk::Viewport( 0.0f, 0.0f, mSwapchain.GetExtent().width, mSwapchain.GetExtent().height, 0.0f, 1.0f ) );
@@ -64,7 +64,7 @@ burst::Display::Render( burst::Presenter & inPresenter )
     }
     commandBuffer.end();
 
-    mSwapchain.SubmitCommandBuffer( theFrameIndex, commandBuffer );
+    mSwapchain.SubmitCommandBuffer( frameInfo.mImageIndex, commandBuffer );
 }
 
 void
